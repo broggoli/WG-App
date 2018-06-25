@@ -1,3 +1,5 @@
-<p>
-  login works!
-</p>
+<form class="loginForm" (submit)="loginUser($event)">
+  <input type="text" name="Username" placeholder="Username" id="username">
+  <input type="text" name="Password" placeholder="Password" id="password">
+  <input type="submit" value="Login">
+</form>
