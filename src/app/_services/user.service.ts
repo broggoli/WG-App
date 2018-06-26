@@ -5,6 +5,9 @@ interface myData {
     message: string,
     success: boolean
 }
+interface logoutStatus{
+    success: boolean
+}
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +18,10 @@ export class UserService {
 
   getSomeData() {
       return this.http.get<myData>("/api/database.php")
+  }
+
+  logout() {
+    return this.http.get<logoutStatus>("/api/logout.php")
   }
 
 }

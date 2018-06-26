@@ -16,6 +16,11 @@ export class AdminComponent implements OnInit {
     this.user.getSomeData().subscribe( data => {
         console.log(data)
         this.message = data.message
+
+        //Remove the localStorage item saying the user is still logged in
+        if(!data.success){
+          localStorage.removeItem("loggedIn")
+        }
     })
   }
 

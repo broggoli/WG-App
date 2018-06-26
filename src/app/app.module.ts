@@ -8,12 +8,12 @@ import { LoginComponent } from './login/login.component';
 import { AlertComponent } from './alert/alert.component';
 import { HomeComponent } from './home/home.component';
 import { AdminComponent } from './admin/admin.component';
+import { LogoutComponent } from './logout/logout.component'
 
 import { UserService } from "./_services"
 import { AuthService } from "./_services"
-import { UserService } from "./_services"
 
-import { AuthGuard } from "./auth.guard"
+import { AuthGuard } from "./auth.guard";
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { AuthGuard } from "./auth.guard"
     LoginComponent,
     AlertComponent,
     HomeComponent,
-    AdminComponent
+    AdminComponent,
+    LogoutComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +36,11 @@ import { AuthGuard } from "./auth.guard"
       {
           path: "login",
           component: LoginComponent
+
+      },
+      {
+          path: "logout",
+          component: LogoutComponent
 
       },
       {

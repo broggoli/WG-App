@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     event.preventDefault()
     const target = event.target
     //getting the text out of the form
-    const formElement =  document.querySelector(".loginForm")
+    const Element formElement =  document.querySelector(".loginForm")
     const formData = new FormData(formElement)
 
     /* Tryes to get the user's data from the backend */
