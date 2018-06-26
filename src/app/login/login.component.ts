@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services';
+import { Router } from "@angular/router"
 
 @Component({
   selector: 'login',
@@ -8,7 +9,8 @@ import { AuthService } from '../_services';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private Auth: AuthService) { }
+  constructor(private Auth: AuthService,
+              private router: Router) { }
 
   ngOnInit() {
   }
@@ -20,7 +22,16 @@ export class LoginComponent implements OnInit {
     const username = target.querySelector("#username").value
     const password = target.querySelector("#password").value
 
-    this.Auth.getUserDetails(username, password)
+    /* Tryes to get the user's data from the backend */
+    this.Auth.getUserDetails(username, password).subscribe(data => {
+        if(data.success){
+            //if the backend says everything is ok -> redirect to user's page
+            this.router.navigate(["admin"])
+            this.Auth.setLoggedIn(true)
+        }else{
+            console.log(data.message)
+        }
+    })
     console.log(username, password)
   }
 
