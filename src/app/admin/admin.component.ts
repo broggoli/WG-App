@@ -14,6 +14,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.user.getSomeData().subscribe( data => {
+        console.log(data)
         this.message = data.message
     })
   }

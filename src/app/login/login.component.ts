@@ -19,20 +19,19 @@ export class LoginComponent implements OnInit {
     event.preventDefault()
     const target = event.target
     //getting the text out of the form
-    const username = target.querySelector("#username").value
-    const password = target.querySelector("#password").value
+    const formElement =  document.querySelector(".loginForm")
+    const formData = new FormData(formElement)
 
     /* Tryes to get the user's data from the backend */
-    this.Auth.getUserDetails(username, password).subscribe(data => {
+    this.Auth.getUserDetails(formData).subscribe(data => {
         if(data.success){
             //if the backend says everything is ok -> redirect to user's page
             this.router.navigate(["admin"])
             this.Auth.setLoggedIn(true)
         }else{
-            console.log(data.message)
+            console.log(data)
         }
     })
-    console.log(username, password)
   }
 
 }
