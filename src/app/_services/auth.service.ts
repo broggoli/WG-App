@@ -11,16 +11,17 @@ interface myData {
 })
 export class AuthService {
 
-  private loggedInStatus = false
+  private loggedInStatus = JSON.parse(localStorage.getItem("loggedIn") || "false")
 
   constructor(private http: HttpClient) { }
 
   setLoggedIn(status: boolean){
       this.loggedInStatus = status
+      localStorage.setItem("loggedIn", "true")
   }
   // get acts like a propertyname even thiugh it's a function
   get isLoggedIn(){
-    return this.loggedInStatus
+    return JSON.parse(localStorage.getItem("loggedIn") || this.loggedInStatus.toString())
   }
 
   getUserDetails(formData) {
