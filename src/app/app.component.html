@@ -1,1 +1,22 @@
-<router-outlet></router-outlet>
+<div id="app">
+    <header>
+        <div id="title">
+            <h4>B-Achtung</h4>
+            <h3>WG-APP</h3>
+        </div>
+        <button id="logOutButton" routerLink="logout" class="button">Abmelden</button>
+    </header>
+
+    <!-- This is the content area. The individual pages are loded in here-->
+    <div id="content">
+        <router-outlet></router-outlet>
+    </div>
+
+    <div id="footer">
+        <div id="info">
+            <div id="madeBy">
+            <p><a href="http://broggoli.ch">Webdesign & copyright by Nick Bachmann</a></p>
+            </div>
+        </div>
+    </div>
+</div>

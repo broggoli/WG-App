@@ -1,0 +1,69 @@
+//utilities
+@import "../sass/colors.sass"
+@import "../sass/utils/button.sass"
+@import "../sass/utils/inputs.sass"
+
+#loginPage
+    box-shadow: rgba(0, 0, 0, 0.3) 0 0.2em 1em
+    max-width: 22em
+    width: 90%
+
+    margin-left: auto
+    margin-right: auto
+
+
+    padding-top: 0.5em
+    margin-top: 0.5em
+    padding-bottom: 2em
+
+    border-radius: 7px
+
+    form
+        flex-direction: column
+        margin: auto
+        width: 80%
+
+        input
+            width: 100%
+            margin-bottom: 1em
+            font-size: small
+            width: 96%
+        .has-danger > input
+          border: solid red
+        .has-success > input
+          border: solid green
+
+
+        .checkbox
+            position: relative
+            top: 5px
+            display: inline-block
+            width: auto
+            margin-left: 1em
+            transform: scale(1.4)
+            transition: 200ms
+
+
+        .checkbox:hover
+            transform: scale(1.6)
+
+        .button
+            width: 100%
+            margin-top: 1em
+
+        .svgAnim
+          width: 100%
+          height: 50px
+          align-content: center
+          text-align: center
+          justify-content: center
+          img
+            height: 45px
+            align-self: center
+
+    #toRegisterButton
+        display: block
+        margin-top: 1em
+        color: lighten( $black, 60%)
+        cursor: pointer
+        text-align: center
