@@ -17,6 +17,8 @@ import { UserService } from "./_services"
 import { AuthService } from "./_services"
 
 import { AuthGuard } from "./auth.guard";
+import { NewOrJoinComponent } from './new-or-join/new-or-join.component';
+import { RegisterUserComponent } from './register-user/register-user.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { AuthGuard } from "./auth.guard";
     HomeComponent,
     AdminComponent,
     LogoutComponent,
-    RegisterComponent
+    RegisterComponent,
+    NewOrJoinComponent,
+    RegisterUserComponent
   ],
   imports: [
     BrowserModule,

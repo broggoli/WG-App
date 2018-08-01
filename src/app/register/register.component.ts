@@ -13,7 +13,10 @@ styleUrls: ['./register.component.sass']
 })
 export class RegisterComponent implements OnInit {
 
-  //Form groups
+  // Form Position 
+  formPosition: number
+  
+  // Form groups
   registerForm: FormGroup
   newOrJoin:    FormGroup
   userDetails:  FormGroup
