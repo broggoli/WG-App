@@ -39,4 +39,8 @@ export class CryptoService {
     encryptData(data: userData, password: string): string {
                             return crypto.AES.encrypt(JSON.stringify(data), password)
                                 .toString()};
+    
+    hash(str: string):string {
+      return crypto.SHA256(str).toString()
+    }
 }

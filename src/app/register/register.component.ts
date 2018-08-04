@@ -14,16 +14,13 @@ styleUrls: ['./register.component.sass']
 export class RegisterComponent implements OnInit {
 
   // Form Position 
-  formPosition: number
+  currentStep: string
   
   // Form groups
   registerForm: FormGroup
-  newOrJoin:    FormGroup
   userDetails:  FormGroup
   addFlatMates: FormGroup
   flatDetails:  FormGroup
-
-  joinFlat: FormControl;
 
   userName: FormGroup
   firstName: FormControl
@@ -41,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
   registerError: string = ""
 
-  constructor(private registry: RegisterService,
+  constructor(private register: RegisterService,
         private router: Router) { 
 
   this.createFormControls()
@@ -84,9 +81,6 @@ export class RegisterComponent implements OnInit {
             [ Validators.required,
               Validators.pattern("^[-'a-zA-ZÀ-ÖØ-öø-ſ]+$")
             ])
-  this.joinFlat = new FormControl("",
-        [ Validators.required
-        ])
   }
   createForm(){
     this.passwordInput = new FormGroup({
@@ -102,9 +96,6 @@ export class RegisterComponent implements OnInit {
       email: this.email,
       passwordInput: this.passwordInput
     })
-    this.newOrJoin = new FormGroup({
-      joinFlat: this.joinFlat
-    })
     this.flatDetails = new FormGroup({
       flatname: this.flatName
     })
@@ -113,7 +104,6 @@ export class RegisterComponent implements OnInit {
     })
 
     this.registerForm = new FormGroup({
-      newOrJoin: this.newOrJoin,
       userDetails: this.userDetails,
       addFlatMates: this.addFlatMates,
       flatDetails: this.flatDetails
@@ -121,7 +111,7 @@ export class RegisterComponent implements OnInit {
     
   }
 
-  register(){
+  reg(){
     if( this.registerForm.valid )
     {
       /*
@@ -131,7 +121,7 @@ export class RegisterComponent implements OnInit {
     const password = this.password.value.trim()
     const userData = this.getUserDataObj
     console.log(userData)
-    this.registry.saveNewUser(userData, password)
+    this.register.saveNewUser(userData, password)
         .subscribe( data => {
 
             this.showLoader(false)
@@ -212,10 +202,9 @@ return endDate > startDate ? null : { endBeforeStart: true }
 }
 
 function equalValidator(group: FormGroup){
-const password = group.get('password').value
-const repeatPassword = group.get('repeatPassword').value
+  const password = group.get('password').value
+  const repeatPassword = group.get('repeatPassword').value
 
-
-// If the first password doesn't match the second, return a validation error
-return password === repeatPassword ? null : { mismatch: true }
+  // If the first password doesn't match the second, return a validation error
+  return password === repeatPassword ? null : { mismatch: true }
 }

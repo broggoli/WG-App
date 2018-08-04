@@ -2,9 +2,22 @@
 <div id="registerPage">
     <h2 id="registerTitle">Registrierung</h2>
 
-    <app-new-or-join *ngIf="true"></app-new-or-join>
-    <app-register-user *ngIf="true"></app-register-user>
-    <app-new-or-join *ngIf="true"></app-new-or-join>
+    <app-new-or-join 
+      *ngIf="register.getCurrentStep === 'newOrJoin'">
+    </app-new-or-join>
 
+    <app-register-user 
+      *ngIf="register.getCurrentStep === 'enterUserData'"
+     ></app-register-user>
+
+     <app-enter-code
+     *ngIf="register.getCurrentStep === 'enterCode'"
+    ></app-enter-code>
+     
+    <app-add-flat-mates
+      *ngIf="register.getCurrentStep === 'addFlatMates'"
+    >></app-add-flat-mates>
+    
+  {{ register.getCurrentStep }}
     <div id="backButton"><a id="registerBackButton" routerLink="">Zurück zum Login</a></div>
 </div>

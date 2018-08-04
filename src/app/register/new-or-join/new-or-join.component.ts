@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { RegisterService } from "../../_services"
 
 @Component({
   selector: 'app-new-or-join',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NewOrJoinComponent implements OnInit {
 
-  constructor() { }
+  constructor(private register: RegisterService) { }
 
   ngOnInit() {
   }
