@@ -1,8 +1,13 @@
+// Angluar imports
 import { Injectable } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+// Services
 import { CryptoService } from './crypto.service'
 import { UserService } from './user.service'
 import { FlatService } from './flat.service'
 
+// Modules
 import { RegisterData, 
         RegiterUserData} from "../modules/register.model"
 import { UserData } from "../modules/user.module"
@@ -17,43 +22,87 @@ interface ValidationMessage {
 })
 export class RegisterService {
   
-  // Form Position 
-  steps: string[]
+  // Form Position
   registerData: RegisterData;
+  errorMessage: string;
 
   constructor(private crypto: CryptoService,
               private user: UserService,
-              private flat: FlatService) {
-    
-    this.registerData = {
-      join: undefined,
-      flatCode: "",
-      flatCodeHash: "",
-      userData: {
-        names:{
-          firstName: "",
-          lastName: "",
-          userName: ""
-        },
-        passwords: {
-          PW: "",
-          confirmPW: ""
-        }
-      },
-      flatData: {
-        name: ""
-      },
-      flatMates: []
-    }
-    this.steps = ["flatDetails"]
+              private flat: FlatService,
+              private activatedRoute: ActivatedRoute) {
+
+    this.registerData = this.getRegisterData
+    this.setStartStep = "newOrJoin"
+    this.errorMessage = ""
     //this.steps = ["addFlatMates"]
   }
+  
+  get getRegisterData() {
+    let regData: RegisterData;
+    const retrievedRegisterData = JSON.parse(sessionStorage.getItem("registerData"))
+    if( retrievedRegisterData ) {
+      regData = retrievedRegisterData
+    }else{
+      // retrun default 
+      regData = {
+        join: undefined,
+        flatCode: "",
+        flatCodeHash: "",
+        userData: {
+          names:{
+            firstName: "",
+            lastName: "",
+            userName: ""
+          },
+          passwords: {
+            PW: "",
+            confirmPW: ""
+          }
+        },
+        flatData: {
+          name: ""
+        },
+        flatMates: []
+      }
+    }
+    return regData
+  }
+  tempSaveUserData() {
+    sessionStorage.setItem("registerData", JSON.stringify(this.registerData) )
+  }
+  set setStartStep(step: string) {
+    if(this.getSteps === []){
+      sessionStorage.setItem("currentFormStep", JSON.stringify([step]) )
+    }
+  }
+  get getSteps(): string[]{
+    const savedStack = sessionStorage.getItem("currentFormStep")
+    if( savedStack ){
+      return <string[]>JSON.parse(savedStack)
+    }else{
+      return [];
+    }
+  }
+  set addStep(step: string) {
+    const savedStack = this.getSteps;
+    savedStack.push(step)
+    sessionStorage.setItem("currentFormStep", JSON.stringify(savedStack) )
+  }
+  deleteLastStep() {
+    let steps = this.getSteps
+    const previousStep = steps.pop()
+    sessionStorage.setItem("currentFormStep", JSON.stringify(steps) )
+  }
 
+
+
+  // Update User Data Obnject
   enterCode(code: string) {
     if( validateCode(code) ){
       this.registerData.flatCode = code;
       this.registerData.flatCodeHash = this.crypto.hash(code);
-      this.steps.push("enterUserData")
+      this.addStep = "enterUserData"
+      this.tempSaveUserData()
     }
 
     
@@ -66,13 +115,17 @@ export class RegisterService {
   get getJoin(){
     return this.registerData.join;
   }
-  get getCurrentStep(){
+  get getCurrentStep(): string {
     //return last element from stack
-    return this.steps[this.steps.length-1];
+    const lastIndex = this.getSteps.length-1
+    return this.getSteps[lastIndex];
   }
-  get getPrevious(){
-    if(this.steps.length > 1){
-      return this.steps.pop();
+  get getPrevious(): string {
+    if(this.getSteps.length > 1){
+      let steps = this.getSteps
+      const previousStep = steps.pop()
+      this.deleteLastStep()
+      return previousStep;
     }else{
       return this.getCurrentStep;
     }
@@ -82,31 +135,55 @@ export class RegisterService {
     
     //redirect
     join 
-    ? this.steps.push("enterCode") 
-    : this.steps.push("enterUserData") 
+    ? this.addStep = "enterCode" 
+    : this.addStep = "enterUserData"
   }
   set setUserData(userData: RegiterUserData){
     this.registerData.userData = userData
 
     //redirect if the user generates a new flat, otherwise Register
     if( this.registerData.join === false){
-      this.steps.push("addFlatMates") 
+      this.addStep ="addFlatMates"
     }else if( this.registerData.join === true){
       this.registerUserInExistingFlat();
       console.log("Registering user in existing Flat")
     }else{
       console.log("Join not definded: " + this.registerData.join)
     }
+    
+    this.tempSaveUserData()
   }
   set setFlatMates(flatMates) {
     this.registerData.flatMates = flatMates
   }
 
+  set setFlatName(flatName: string) {
+    this.registerData.flatData.name = flatName
+  }
 
-  generateNewFlat(){
+  generateNewUser() {
+    const userData: UserData = this.getUserData()
+    const PW =  this.registerData.userData.passwords.PW
+    const userName =  this.registerData.userData.names.userName
+    
+    const userDataVal = validateUserData(userData)
+    const passwordVal = validatePassword(PW)
+
+    if( userDataVal.valid === true && passwordVal.valid === true){
+      const saveNewUser = this.user.saveNewUser(userData, PW).subscribe( data => {
+        console.log(data)
+      })
+    }else{
+      console.log(userDataVal.message)
+    }
+  }
+
+  generateNewFlat() {
     if( this.registerData.join === false){
-
-      console.log(this.registerData)
+      this.generateNewUser()
+      this.flat.saveNewFlat( this.registerData.flatData).subscribe( data => {
+        console.log(data)
+      })
     }else{
       console.log("Join isnt set to false!")
     }
@@ -114,20 +191,14 @@ export class RegisterService {
 
   registerUserInExistingFlat() {
     if( this.registerData.join === true){
+      this.generateNewUser()
       const userData: UserData = this.getUserData()
       const PW =  this.registerData.userData.passwords.PW
       const userName =  this.registerData.userData.names.userName
       
-      const userDataVal = validateUserData(userData)
-      const passwordVal = validatePassword(PW)
+      const userPointer = this.user.getUserPointer(userName, PW)
+      this.flat.linkFlatToUser(this.registerData.flatCode, userPointer)
 
-      if( userDataVal.valid === true && passwordVal.valid === true){
-        this.user.saveNewUser(userData, PW)
-        const userPointer = this.user.getUserPointer(userName, PW)
-        this.flat.linkFlatToUser(this.registerData.flatCode, userPointer)
-      }else{
-        console.log(userDataVal.message)
-      }
     }else{
       console.log("Join isnt set to true!")
     }
@@ -136,6 +207,7 @@ export class RegisterService {
   getUserData(): UserData{
     const userData = this.registerData.userData;
     return  {
+                pointer: "",
                 names:  processNames(userData.names)
             }
   }

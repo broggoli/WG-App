@@ -49,7 +49,7 @@
       <div [ngClass]="{'has-danger': PW.invalid && (PW.dirty || PW.touched), 'has-success': passwords.valid &&  PW.valid && (PW.dirty || PW.touched) }"
         class="container">
         <input formControlName="PW" 
-          type="PW" 
+          type="password" 
           placeholder="Passwort" 
           id="registerPW" 
           name="registerPW" 
@@ -83,7 +83,7 @@
     <div *ngIf="userRegisterForm.invalid" class="form-control-feedback">
       <span>Sie müssen das Formular korrekt ausfüllen, bevor sie es abschicken können.</span>
     </div>
-    <div *ngIf="userRegisterForm.valid &amp;&amp; registerError != '' " class="form-control-feedback">
+    <div *ngIf="userRegisterForm.valid && register.errorMessage !== '' " class="form-control-feedback">
       <span>Die Registrierung ist fehlgeschlagen.</span>
       <br/>
       <span>Error: {{ registerError }}</span>
@@ -102,4 +102,3 @@
       </button>
   </div>
 </div>
-<pre>{{ userRegisterForm.value | json }}</pre>

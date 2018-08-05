@@ -14,8 +14,11 @@
 .button.disabled:hover
   animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both
   background-color: $errorColor
-  transform: translate3d(0, 0,0)
+  transform: translate3d(0, 0, 0)
   perspective: 1000px
+.button.enabled:hover
+    background: $darkblue
+    color: $white
 .button:hover:not(.disabled, .soft-disabled)
     background: $darkblue
     color: $white

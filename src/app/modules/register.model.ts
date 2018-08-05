@@ -21,8 +21,8 @@ export class FlatData {
 name: string;
 }
 export class FlatMateRegister {
-names: {
-    firstName:  string;
-    lastName:   string;
-}
+    names: {
+        firstName:  string;
+        lastName:   string;
+    }
 }

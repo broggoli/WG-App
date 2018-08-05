@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as crypto from 'crypto-js';
+import { UserData } from "../modules/user.module"
 
 interface userData{
     surname: string ,
@@ -7,8 +8,8 @@ interface userData{
     email: string
 }
 interface enryptedData {
-  ziviDataHeader: string,
-  encryptedZiviData: string
+  pointer: string,
+  encryptedData: string
 }
 
 @Injectable({
@@ -18,10 +19,10 @@ export class CryptoService {
 
   constructor() { }
 
-  encryptForDB(data: userData, password: string): enryptedData{
+    encryptForDB(data: any, password: string): enryptedData{
     return  {
-                ziviDataHeader: this.getUserPointer(data.email, password),
-                encryptedZiviData: this.encryptData(data, password)
+                pointer: this.getUserPointer(data.names.userName, password),
+                encryptedData: this.encryptData(data, password)
             }
     }
     //returns the name concatonated with the password as a sha256 hash
@@ -36,7 +37,7 @@ export class CryptoService {
 
     // Gets an object that is being stringyfied then encrypted
     //using the password
-    encryptData(data: userData, password: string): string {
+    encryptData(data: any, password: string): string {
                             return crypto.AES.encrypt(JSON.stringify(data), password)
                                 .toString()};
     

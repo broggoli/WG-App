@@ -5,7 +5,7 @@
     <div [ngClass]="{'has-danger': mateFirstName.invalid && (mateFirstName.dirty || mateFirstName.touched), 
                     'has-success': mateFirstName.valid && (mateFirstName.dirty || mateFirstName.touched) }"
       class="container">
-      <input formControlName="mateFirstName" 
+      <input formControlName="mateFirstName"
           type="text" 
           placeholder="Vorname" 
           id="registerFirstName" 
@@ -19,9 +19,10 @@
       <br/>
     </div>
 
-    <div [ngClass]="{'has-danger': mateLastName.invalid && (mateLastName.dirty || mateLastName.touched), 'has-success': mateLastName.valid && (mateLastName.dirty || mateLastName.touched) }"
+    <div  [ngClass]="{'has-danger': mateLastName.invalid && (mateLastName.dirty || mateLastName.touched), 
+                      'has-success': mateLastName.valid && (mateLastName.dirty || mateLastName.touched) }"
       class="container">
-      <input formControlName="mateLastName" 
+      <input formControlName="mateLastName"
           type="text" 
           placeholder="Nachname" 
           id="registerLastName" 
@@ -34,8 +35,7 @@
       </div>
     </div>
     <button class="button addMateButton" 
-            (click)="addFlatMate()"
-            [ngClass]="{'disabled': addFlatMatesForm.invalid}">
+            (click)="addFlatMate()">
       +
     </button>
 
@@ -43,7 +43,7 @@
 
   <div class="flatMatesContainer">
     <div class="flatMate" *ngFor="let flatMate of flatMates">
-        <span> {{ flatMate.firstName }} {{ flatMate.lastName }}</span>
+        <span> {{ flatMate.names.firstName }} {{ flatMate.names.lastName }}</span>
         <span class="deleteMate" (click)="deleteFlatMate(flatMate)">X</span>
     </div>
     <div *ngIf="flatMates.length < 1">
@@ -57,15 +57,8 @@
           Zrugg
     </button>
     <button class="button"
-            (click)="sendUserData()"
-            disabled
-            [ngClass]="{'soft-disabled': true}">
+            (click)="register.addStep = 'flatDetails'">
       Wiiter
     </button>
   </div>
-
-  <button class="button registerButton"
-        (click)="register.setFlatMates=flatMates; register.generateNewFlat()">
-    Registrieren
-  </button>
 </div>

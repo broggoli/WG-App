@@ -3,11 +3,7 @@ import { RegisterService } from "../../_services"
 import {  FormControl, 
           FormGroup, 
           Validators } from '@angular/forms';
-
-interface Mate {
-  firstName: string,
-  lastName: string
-}
+import { FlatMateRegister } from '../../modules/register.model';
 
 @Component({
   selector: 'app-add-flat-mates',
@@ -19,14 +15,14 @@ export class AddFlatMatesComponent implements OnInit {
   addFlatMatesForm: FormGroup
   mateFirstName: FormControl
   mateLastName: FormControl
-  flatMates: Mate[]
+  flatMates: FlatMateRegister[]
 
   constructor(private register: RegisterService) { }
 
   ngOnInit() {
     this.createFormControls()
     this.createForm()
-    this.flatMates = []
+    this.flatMates = this.register.registerData.flatMates
   }
   
   createFormControls(){
@@ -48,15 +44,21 @@ export class AddFlatMatesComponent implements OnInit {
     var index = this.flatMates.indexOf(mate);
     if (index > -1) {
       this.flatMates.splice(index, 1);
+      this.register.setFlatMates = this.flatMates
     }
   }
   addFlatMate() {
     if(this.addFlatMatesForm.valid)
     {
-      this.flatMates.push({
-        firstName: this.mateFirstName.value,
-        lastName: this.mateLastName.value,
+      this.flatMates.push(
+      {
+        names: {
+            firstName: this.mateFirstName.value,
+            lastName: this.mateLastName.value,
+          }
       })
+      this.register.setFlatMates = this.flatMates
+      this.addFlatMatesForm.reset()
     }else{
       console.log("an error occured")
     }

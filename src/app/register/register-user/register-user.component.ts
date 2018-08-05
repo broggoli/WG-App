@@ -26,23 +26,23 @@ export class RegisterUserComponent implements OnInit {
   }
 
   createFormControls(){
-    this.firstName = new FormControl("",
+    this.firstName = new FormControl(this.register.registerData.userData.names.firstName,
               [ Validators.required,
                 Validators.pattern("^[-'a-zA-ZÀ-ÖØ-öø-ſ]+$")
               ])
-    this.lastName = new FormControl("",
+    this.lastName = new FormControl(this.register.registerData.userData.names.lastName,
               [ Validators.required,
                 Validators.pattern("^[-'a-zA-ZÀ-ÖØ-öø-ſ]+$")
               ])
-    this.userName = new FormControl("",
+    this.userName = new FormControl(this.register.registerData.userData.names.userName,
               [ Validators.required,
                 Validators.pattern("^[-'a-zA-ZÀ-ÖØ-öø-ſ]+$")
               ])
-    this.PW = new FormControl("",
+    this.PW = new FormControl(this.register.registerData.userData.passwords.PW,
               [ Validators.required,
                 Validators.minLength(6)
               ])
-    this.confirmPW = new FormControl("",
+    this.confirmPW = new FormControl(this.register.registerData.userData.passwords.confirmPW,
               [ Validators.required,
                 Validators.minLength(6)
               ])
