@@ -1,0 +1,56 @@
+@import "../../sass/colors.sass"
+@import "../../sass/utils/button.sass"
+@import "../../sass/utils/inputs.sass"
+
+.content
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    width: 100%
+    
+    form
+        margin-top: 1em 
+        width: 90%
+        display: flex
+        align-self: center
+        
+        flex-direction: row
+        justify-content: space-between
+
+        input
+            margin: 0.5em
+            width: 90%
+        
+        .button.addMateButton
+            height: 2em
+            margin: 0.5em
+            padding: 0.6em
+    .flatMatesContainer
+        min-height: 2em
+        width: 85%
+
+        .flatMate
+            width: 95%
+            display: flex
+            justify-content: space-between
+            border-bottom: solid
+            .deleteMate
+                background: $pseudoColor
+                color: $white
+                padding: 0.2em
+                cursor: pointer
+
+    .buttonContainer
+        width: 90%
+        margin: 0.5em
+        display: flex
+        flex-direction: row
+        justify-content: center
+        align-items: center
+
+        .button
+            margin: 0.5em
+
+    .button.registerButton
+        width: 90%

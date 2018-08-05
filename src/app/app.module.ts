@@ -21,6 +21,7 @@ import { NewOrJoinComponent } from './register/new-or-join/new-or-join.component
 import { RegisterUserComponent } from './register/register-user/register-user.component';
 import { AddFlatMatesComponent } from './register/add-flat-mates/add-flat-mates.component';
 import { EnterCodeComponent } from './register/enter-code/enter-code.component';
+import { FlatRegisterComponent } from './register/flat-register/flat-register.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { EnterCodeComponent } from './register/enter-code/enter-code.component';
     NewOrJoinComponent,
     RegisterUserComponent,
     AddFlatMatesComponent,
-    EnterCodeComponent
+    EnterCodeComponent,
+    FlatRegisterComponent
   ],
   imports: [
     BrowserModule,

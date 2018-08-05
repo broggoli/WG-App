@@ -1,23 +1,36 @@
 
 <div id="registerPage">
-    <h2 id="registerTitle">Registrierung</h2>
+  <h2 id="registerTitle">Registrierung</h2>
 
-    <app-new-or-join 
+  <div id="currentStepContent">
+    <app-new-or-join class="stepContnet"
       *ngIf="register.getCurrentStep === 'newOrJoin'">
     </app-new-or-join>
 
-    <app-register-user 
+    <app-register-user class="stepContnet"
       *ngIf="register.getCurrentStep === 'enterUserData'"
      ></app-register-user>
 
-     <app-enter-code
+     <app-enter-code class="stepContnet"
      *ngIf="register.getCurrentStep === 'enterCode'"
     ></app-enter-code>
      
-    <app-add-flat-mates
+    <app-add-flat-mates class="stepContnet"
       *ngIf="register.getCurrentStep === 'addFlatMates'"
-    >></app-add-flat-mates>
-    
-  {{ register.getCurrentStep }}
-    <div id="backButton"><a id="registerBackButton" routerLink="">Zurück zum Login</a></div>
+    ></app-add-flat-mates>
+    <app-flat-register class="stepContnet"
+      *ngIf="register.getCurrentStep === 'flatDetails'">
+    </app-flat-register>
+  </div>
+
+  <div style="display: none" class="loadingAnim svgAnim">
+      <img src="../assets/svg/loader.svg" />
+    </div>
+    <div style="display: none" class="inputsChecked svgAnim">
+      <img src="../assets/svg/check.svg" />
+    </div>
+  <pre>{{ register.registerData | json }}</pre>
+    <div id="backButton">
+      <a id="registerBackButton" routerLink="">Zurück zum Login</a>
+    </div>
 </div>

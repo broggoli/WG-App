@@ -1,20 +1,31 @@
-<form [formGroup]="flatCodeForm" novalidate >
+
+<div class="content">
+  <form [formGroup]="flatCodeForm" novalidate >
     <div [ngClass]="{'has-danger': flatCode.invalid && (flatCode.dirty || flatCode.touched), 'has-success': flatCode.valid && (flatCode.dirty || flatCode.touched) }" class="container">
       
-      <input formControlName="flatCode" type="text" placeholder="WG-Code" id="flatCode" name="flatCode" class="textInput"/>
+      <input formControlName="flatCode" 
+        type="text" 
+        placeholder="WG-Code" 
+        id="flatCode" 
+        name="flatCode" 
+        class="textInput"/>
       
       <div *ngIf="flatCode.errors && (flatCode.dirty || flatCode.touched) " class="form-control-feedback">
         <span *ngIf="flatCode.errors.required">Gib bitte en WG-Code ii.</span>
       </div>
       <br/>
     </div>
-    
-      
-    <button (click)="register.getPrevious">
+  </form>
+
+  <div class="buttonContainer">
+    <button class="button" 
+            (click)="register.getPrevious">
       Zrugg
     </button>
-    <button (click)="register.enterCode(flatCode.value)"
+    <button class="button"
+            (click)="checkCode(flatCode.value)"
             [ngClass]="{'disabled': flatCodeForm.invalid}">
       Wiiter
     </button>
-</form>
+  </div>
+</div>

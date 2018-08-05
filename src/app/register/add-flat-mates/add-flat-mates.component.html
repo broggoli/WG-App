@@ -1,51 +1,71 @@
-<h3>Lade deine Kamerad_innen ein</h3>
+<div class="content">
+  <h3>Lade deine Kamerad_innen ein</h3>
 
-<form [formGroup]="addFlatMatesForm" novalidate>
-  <div [ngClass]="{'has-danger': mateFirstName.invalid && (mateFirstName.dirty || mateFirstName.touched), 
-                  'has-success': mateFirstName.valid && (mateFirstName.dirty || mateFirstName.touched) }"
-    class="container">
-    <input formControlName="mateFirstName" 
-        type="text" 
-        placeholder="Vorname" 
-        id="registerFirstName" 
-        name="mateFirstName" 
-        class="textInput"/>
-    
-    <div *ngIf="mateFirstName.errors && (mateFirstName.dirty || mateFirstName.touched) " class="form-control-feedback">
-      <span *ngIf="mateFirstName.errors.required">Geben Sie bitte ihren Vornamen ein.</span>
-      <span *ngIf="mateFirstName.errors.pattern">Geben Sie bitte nur ihren Vornamen ohne Abstand oder Sonderzeichen ein.</span>
+  <form [formGroup]="addFlatMatesForm" novalidate>
+    <div [ngClass]="{'has-danger': mateFirstName.invalid && (mateFirstName.dirty || mateFirstName.touched), 
+                    'has-success': mateFirstName.valid && (mateFirstName.dirty || mateFirstName.touched) }"
+      class="container">
+      <input formControlName="mateFirstName" 
+          type="text" 
+          placeholder="Vorname" 
+          id="registerFirstName" 
+          name="mateFirstName" 
+          class="textInput"/>
+      
+      <div *ngIf="mateFirstName.errors && (mateFirstName.dirty || mateFirstName.touched) " class="form-control-feedback">
+        <span *ngIf="mateFirstName.errors.required">Geben Sie bitte ihren Vornamen ein.</span>
+        <span *ngIf="mateFirstName.errors.pattern">Geben Sie bitte nur ihren Vornamen ohne Abstand oder Sonderzeichen ein.</span>
+      </div>
+      <br/>
     </div>
-    <br/>
-  </div>
 
-  <div [ngClass]="{'has-danger': mateLastName.invalid && (mateLastName.dirty || mateLastName.touched), 'has-success': mateLastName.valid && (mateLastName.dirty || mateLastName.touched) }"
-    class="container">
-    <input formControlName="mateLastName" 
-        type="text" 
-        placeholder="Nachname" 
-        id="registerLastName" 
-        name="mateLastName"
-        class="textInput" />
+    <div [ngClass]="{'has-danger': mateLastName.invalid && (mateLastName.dirty || mateLastName.touched), 'has-success': mateLastName.valid && (mateLastName.dirty || mateLastName.touched) }"
+      class="container">
+      <input formControlName="mateLastName" 
+          type="text" 
+          placeholder="Nachname" 
+          id="registerLastName" 
+          name="mateLastName"
+          class="textInput" />
 
-    <div *ngIf="mateLastName.errors && (mateLastName.dirty || mateLastName.touched) " class="form-control-feedback">
-      <span *ngIf="mateLastName.errors.required">Geben Sie bitte ihren Nachnamen ein.</span>
-      <span *ngIf="mateLastName.errors.pattern">Geben Sie bitte ihren Nachnamen ohne Abstand oder Sonderzeichen ein.</span>
-    </div>
-  </div>
-
-  <button (click)="addFlatMate()" >
-    Einladen
-  </button>
-</form>
-
-  <div id="FlatMatesContainer">
-    <div class="flatMate" *ngFor="let flatMate of flatMates">
-      <div (click)="deleteFlatMate(flatMate)">
-        {{ flatMate.firstName }}
-        {{ flatMate.lastName }}
+      <div *ngIf="mateLastName.errors && (mateLastName.dirty || mateLastName.touched) " class="form-control-feedback">
+        <span *ngIf="mateLastName.errors.required">Geben Sie bitte ihren Nachnamen ein.</span>
+        <span *ngIf="mateLastName.errors.pattern">Geben Sie bitte ihren Nachnamen ohne Abstand oder Sonderzeichen ein.</span>
       </div>
     </div>
+    <button class="button addMateButton" 
+            (click)="addFlatMate()"
+            [ngClass]="{'disabled': addFlatMatesForm.invalid}">
+      +
+    </button>
+
+  </form>
+
+  <div class="flatMatesContainer">
+    <div class="flatMate" *ngFor="let flatMate of flatMates">
+        <span> {{ flatMate.firstName }} {{ flatMate.lastName }}</span>
+        <span class="deleteMate" (click)="deleteFlatMate(flatMate)">X</span>
+    </div>
+    <div *ngIf="flatMates.length < 1">
+      <p>Füge hier Freunde hinzu</p>
+    </div>
   </div>
-<button (click)="register.generateNewFlat(flatMates)" >
-  Registrieren
-</button>
+    
+  <div class="buttonContainer">
+    <button class="button"
+        (click)="register.getPrevious">
+          Zrugg
+    </button>
+    <button class="button"
+            (click)="sendUserData()"
+            disabled
+            [ngClass]="{'soft-disabled': true}">
+      Wiiter
+    </button>
+  </div>
+
+  <button class="button registerButton"
+        (click)="register.setFlatMates=flatMates; register.generateNewFlat()">
+    Registrieren
+  </button>
+</div>

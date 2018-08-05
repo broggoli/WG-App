@@ -1,40 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
 import { CryptoService } from './crypto.service'
+import { UserService } from './user.service'
+import { FlatService } from './flat.service'
 
-interface sendRegisterData {
-    success: boolean;
-    message: string;
-}
-interface UserData {
-  names: {
-    firstName:  string;
-    lastName:   string;
-    userName:   string;
-  },
-  passwords: {
-    PW:        string;
-    confirmPW: string;
-  }
-}
-interface FlatData {
-  name: string;
-}
-interface FlatMateRegister {
-  names: {
-    firstName:  string;
-    lastName:   string;
-  }
+import { RegisterData, 
+        RegiterUserData} from "../modules/register.model"
+import { UserData } from "../modules/user.module"
+
+interface ValidationMessage {
+  message: string;
+  valid: boolean;
 }
 
-interface RegisterData {
-  join: boolean;    // true -> join, false -> create new Flat
-  flatCode: string,
-  flatCodeHash: string,
-  userData: UserData;
-  flatData: FlatData;
-  flatMates: FlatMateRegister[]
-}
 @Injectable({
   providedIn: 'root'
 })
@@ -45,7 +22,8 @@ export class RegisterService {
   registerData: RegisterData;
 
   constructor(private crypto: CryptoService,
-              private http : HttpClient) {
+              private user: UserService,
+              private flat: FlatService) {
     
     this.registerData = {
       join: undefined,
@@ -67,22 +45,23 @@ export class RegisterService {
       },
       flatMates: []
     }
-    this.steps = ["newOrJoin"]
+    this.steps = ["flatDetails"]
     //this.steps = ["addFlatMates"]
   }
 
   enterCode(code: string) {
+    if( validateCode(code) ){
+      this.registerData.flatCode = code;
+      this.registerData.flatCodeHash = this.crypto.hash(code);
+      this.steps.push("enterUserData")
+    }
+
+    
     // toDo: check whether flatcode exists
-    this.registerData.flatCode = code;
-    this.registerData.flatCodeHash = this.crypto.hash(code);
+    function validateCode(code){
+      return true;
+    }
   }
-/*
-  saveNewUser(userDataForDB, password){
-        //hashing the name and encrypt with password so it can't easily be read out of the db
-    const dbData = JSON.stringify({'dbData': this.crypto.encryptForDB(userDataForDB, password)})
-    // post these details to API server return user info if correct
-    return this.http.post<sendRegisterData>('/api/php/register.php', dbData)
-  }*/
 
   get getJoin(){
     return this.registerData.join;
@@ -106,18 +85,93 @@ export class RegisterService {
     ? this.steps.push("enterCode") 
     : this.steps.push("enterUserData") 
   }
-  set setUserData(userData: UserData){
+  set setUserData(userData: RegiterUserData){
     this.registerData.userData = userData
 
-    //redirect
-    this.steps.push("addFlatMates") 
+    //redirect if the user generates a new flat, otherwise Register
+    if( this.registerData.join === false){
+      this.steps.push("addFlatMates") 
+    }else if( this.registerData.join === true){
+      this.registerUserInExistingFlat();
+      console.log("Registering user in existing Flat")
+    }else{
+      console.log("Join not definded: " + this.registerData.join)
+    }
   }
   set setFlatMates(flatMates) {
     this.registerData.flatMates = flatMates
   }
-  generateNewFlat(mates){
-    console.log("mates.... ")
-    this.setFlatMates = mates
-    console.log(this.registerData)
+
+
+  generateNewFlat(){
+    if( this.registerData.join === false){
+
+      console.log(this.registerData)
+    }else{
+      console.log("Join isnt set to false!")
+    }
   }
+
+  registerUserInExistingFlat() {
+    if( this.registerData.join === true){
+      const userData: UserData = this.getUserData()
+      const PW =  this.registerData.userData.passwords.PW
+      const userName =  this.registerData.userData.names.userName
+      
+      const userDataVal = validateUserData(userData)
+      const passwordVal = validatePassword(PW)
+
+      if( userDataVal.valid === true && passwordVal.valid === true){
+        this.user.saveNewUser(userData, PW)
+        const userPointer = this.user.getUserPointer(userName, PW)
+        this.flat.linkFlatToUser(this.registerData.flatCode, userPointer)
+      }else{
+        console.log(userDataVal.message)
+      }
+    }else{
+      console.log("Join isnt set to true!")
+    }
+  }
+
+  getUserData(): UserData{
+    const userData = this.registerData.userData;
+    return  {
+                names:  processNames(userData.names)
+            }
+  }
+}
+
+function processNames(names): any{
+  let processedNames = {};
+  for(let name in names) {
+    processedNames[name] = names[name].trim().toLowerCase()
+  }
+  return processedNames
+}
+
+function validateUserData(userData): ValidationMessage{
+  for(let name in userData.names ) {
+    if(!name || name === ""){
+      return {
+        message: `${name} is empty or invaldid`,
+        valid: false
+      };
+    }
+  }
+  return {
+    message: `Everything is valid`,
+    valid: true
+  };
+}
+function validatePassword(pw): ValidationMessage{
+  if(!pw || pw === ""){
+    return {
+      message: `Password is empty or invaldid`,
+      valid: false
+    };
+  }
+  return {
+    message: `Everything is valid`,
+    valid: true
+  };
 }

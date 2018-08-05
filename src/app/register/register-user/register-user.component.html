@@ -1,103 +1,105 @@
-<form [formGroup]="userRegisterForm" novalidate="novalidate">
-  <div id="names" formGroupName="names">
-    <div [ngClass]="{'has-danger': firstName.invalid && (firstName.dirty || firstName.touched), 
-                    'has-success': firstName.valid && (firstName.dirty || firstName.touched) }"
-      class="container">
-      <input formControlName="firstName" 
-          type="text" 
-          placeholder="Vorname" 
-          id="registerFirstName" 
-          name="firstName" 
-          class="textInput"/>
-      
-      <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched) " class="form-control-feedback">
-        <span *ngIf="firstName.errors.required">Geben Sie bitte ihren Vornamen ein.</span>
-        <span *ngIf="firstName.errors.pattern">Geben Sie bitte nur ihren Vornamen ohne Abstand oder Sonderzeichen ein.</span>
-      </div>
-      <br/>
-    </div>
-    <div [ngClass]="{'has-danger': lastName.invalid && (lastName.dirty || lastName.touched), 'has-success': lastName.valid && (lastName.dirty || lastName.touched) }"
-      class="container">
-      <input formControlName="lastName" 
-          type="text" 
-          placeholder="Nachname" 
-          id="registerLastName" 
-          name="lastName"
-          class="textInput" />
 
-      <div *ngIf="lastName.errors && (lastName.dirty || lastName.touched) " class="form-control-feedback">
-        <span *ngIf="lastName.errors.required">Geben Sie bitte ihren Nachnamen ein.</span>
-        <span *ngIf="lastName.errors.pattern">Geben Sie bitte ihren Nachnamen ohne Abstand oder Sonderzeichen ein.</span>
-      </div>
-    </div>
-
-      <div [ngClass]="{'has-danger': userName.invalid && (userName.dirty || userName.touched), 'has-success': userName.valid && (userName.dirty || userName.touched) }"
+<div class="content">
+  <form [formGroup]="userRegisterForm" novalidate="novalidate">
+    <div id="names" formGroupName="names">
+      <div [ngClass]="{'has-danger': firstName.invalid && (firstName.dirty || firstName.touched), 
+                      'has-success': firstName.valid && (firstName.dirty || firstName.touched) }"
         class="container">
-        <input formControlName="userName" type="text" placeholder="Benutzername" id="registerUserName" name="userName" pattern="^[-'a-zA-ZÀ-ÖØ-öø-ſ]+$"
-          class="textInput" />
+        <input formControlName="firstName" 
+            type="text" 
+            placeholder="Vorname" 
+            id="registerFirstName" 
+            name="firstName" 
+            class="textInput"/>
+        
+        <div *ngIf="firstName.errors && (firstName.dirty || firstName.touched) " class="form-control-feedback">
+          <span *ngIf="firstName.errors.required">Geben Sie bitte ihren Vornamen ein.</span>
+          <span *ngIf="firstName.errors.pattern">Geben Sie bitte nur ihren Vornamen ohne Abstand oder Sonderzeichen ein.</span>
+        </div>
+        <br/>
+      </div>
+      <div [ngClass]="{'has-danger': lastName.invalid && (lastName.dirty || lastName.touched), 'has-success': lastName.valid && (lastName.dirty || lastName.touched) }"
+        class="container">
+        <input formControlName="lastName" 
+            type="text" 
+            placeholder="Nachname" 
+            id="registerLastName" 
+            name="lastName"
+            class="textInput" />
 
-        <div *ngIf="userName.errors && (userName.dirty || userName.touched) " class="form-control-feedback">
-          <span *ngIf="userName.errors.required">Geben Sie bitte ihren Nachnamen ein.</span>
-          <span *ngIf="userName.errors.pattern">Geben Sie bitte ihren Nachnamen ohne Abstand oder Sonderzeichen ein.</span>
+        <div *ngIf="lastName.errors && (lastName.dirty || lastName.touched) " class="form-control-feedback">
+          <span *ngIf="lastName.errors.required">Geben Sie bitte ihren Nachnamen ein.</span>
+          <span *ngIf="lastName.errors.pattern">Geben Sie bitte ihren Nachnamen ohne Abstand oder Sonderzeichen ein.</span>
         </div>
       </div>
-  </div>
 
-  <div id="passwords" formGroupName="passwords">
-    <div [ngClass]="{'has-danger': PW.invalid && (PW.dirty || PW.touched), 'has-success': passwords.valid &&  PW.valid && (PW.dirty || PW.touched) }"
-      class="container">
-      <input formControlName="PW" 
-        type="PW" 
-        placeholder="Passwort" 
-        id="registerPW" 
-        name="registerPW" 
-        class="textInput passwordInput"/>
+        <div [ngClass]="{'has-danger': userName.invalid && (userName.dirty || userName.touched), 'has-success': userName.valid && (userName.dirty || userName.touched) }"
+          class="container">
+          <input formControlName="userName" type="text" placeholder="Benutzername" id="registerUserName" name="userName" pattern="^[-'a-zA-ZÀ-ÖØ-öø-ſ]+$"
+            class="textInput" />
 
-      <div *ngIf="PW.errors && (PW.dirty || PW.touched) " class="form-control-feedback">
-        <span *ngIf="PW.errors.required">Geben Sie bitte ein Passwort ein.</span>
-        <span *ngIf="PW.errors.minlength">Geben Sie bitte ein Passwort ein, das mindestens 6 Zeichen lang ist.</span>
+          <div *ngIf="userName.errors && (userName.dirty || userName.touched) " class="form-control-feedback">
+            <span *ngIf="userName.errors.required">Geben Sie bitte ihren Nachnamen ein.</span>
+            <span *ngIf="userName.errors.pattern">Geben Sie bitte ihren Nachnamen ohne Abstand oder Sonderzeichen ein.</span>
+          </div>
+        </div>
+    </div>
+
+    <div id="passwords" formGroupName="passwords">
+      <div [ngClass]="{'has-danger': PW.invalid && (PW.dirty || PW.touched), 'has-success': passwords.valid &&  PW.valid && (PW.dirty || PW.touched) }"
+        class="container">
+        <input formControlName="PW" 
+          type="PW" 
+          placeholder="Passwort" 
+          id="registerPW" 
+          name="registerPW" 
+          class="textInput passwordInput"/>
+
+        <div *ngIf="PW.errors && (PW.dirty || PW.touched) " class="form-control-feedback">
+          <span *ngIf="PW.errors.required">Geben Sie bitte ein Passwort ein.</span>
+          <span *ngIf="PW.errors.minlength">Geben Sie bitte ein Passwort ein, das mindestens 6 Zeichen lang ist.</span>
+        </div>
+      </div>
+
+      <div [ngClass]="{'has-danger': confirmPW.invalid && (confirmPW.dirty || confirmPW.touched), 'has-success': passwords.valid && confirmPW.valid && (confirmPW.dirty || confirmPW.touched) }"
+        class="container">
+        <input formControlName="confirmPW" 
+          type="password" 
+          placeholder="Passwort wiederholen" 
+          id="confirmPW" 
+          name="confirmPW" 
+          class="textInput passwordInput"/>
+
+        <div *ngIf="confirmPW.errors && (confirmPW.dirty || confirmPW.touched) " class="form-control-feedback">
+          <span *ngIf="confirmPW.errors.required">Geben Sie bitte ein Passwort ein.</span>
+          <span *ngIf="confirmPW.errors.minlength">Geben Sie bitte ein Passwort ein, das mindestens 6 Zeichen lang ist.</span>
+        </div>
+      </div>
+
+      <div *ngIf="passwords.errors && (passwords.dirty || passwords.touched) && confirmPW.valid && PW.valid" class="form-control-feedback">
+        <span *ngIf="passwords.errors?.mismatch">Die Passwöter stimmen nicht überein.</span>
       </div>
     </div>
-
-    <div [ngClass]="{'has-danger': confirmPW.invalid && (confirmPW.dirty || confirmPW.touched), 'has-success': passwords.valid && confirmPW.valid && (confirmPW.dirty || confirmPW.touched) }"
-      class="container">
-      <input formControlName="confirmPW" 
-        type="password" 
-        placeholder="Passwort wiederholen" 
-        id="confirmPW" 
-        name="confirmPW" 
-        class="textInput passwordInput"/>
-
-      <div *ngIf="confirmPW.errors && (confirmPW.dirty || confirmPW.touched) " class="form-control-feedback">
-        <span *ngIf="confirmPW.errors.required">Geben Sie bitte ein Passwort ein.</span>
-        <span *ngIf="confirmPW.errors.minlength">Geben Sie bitte ein Passwort ein, das mindestens 6 Zeichen lang ist.</span>
-      </div>
+    <div *ngIf="userRegisterForm.invalid" class="form-control-feedback">
+      <span>Sie müssen das Formular korrekt ausfüllen, bevor sie es abschicken können.</span>
     </div>
-
-    <div *ngIf="passwords.errors && (passwords.dirty || passwords.touched) && confirmPW.valid && PW.valid" class="form-control-feedback">
-      <span *ngIf="passwords.errors?.mismatch">Die Passwöter stimmen nicht überein.</span>
-    </div>
+    <div *ngIf="userRegisterForm.valid &amp;&amp; registerError != '' " class="form-control-feedback">
+      <span>Die Registrierung ist fehlgeschlagen.</span>
+      <br/>
+      <span>Error: {{ registerError }}</span>
+    </div>      
+  </form>
+  
+  <div class="buttonContainer">    
+      <button class="button"
+        (click)="register.getPrevious">
+          Zrugg
+      </button>
+      <button class="button"
+              (click)="sendUserData()"
+              [ngClass]="{'disabled': userRegisterForm.invalid}">
+        Wiiter
+      </button>
   </div>
-  <div *ngIf="userRegisterForm.invalid" class="form-control-feedback">
-    <span>Sie müssen das Formular korrekt ausfüllen, bevor sie es abschicken können.</span>
-  </div>
-  <div *ngIf="userRegisterForm.valid &amp;&amp; registerError != '' " class="form-control-feedback">
-    <span>Die Registrierung ist fehlgeschlagen.</span>
-    <br/>
-    <span>Error: {{ registerError }}</span>
-  </div>
-  <div style="display: none" class="loadingAnim svgAnim">
-    <img src="../../assets/svg/loader.svg" />
-  </div>
-  <div style="display: none" class="inputsChecked svgAnim">
-    <img src="../../assets/svg/check.svg" />
-  </div>
-  <button (click)="register.getPrevious">
-      Zrugg
-    </button>
-    <button (click)="sendUserData()"
-            [ngClass]="{'disabled': userRegisterForm.invalid}">
-      Wiiter
-    </button>
-</form>
+</div>
 <pre>{{ userRegisterForm.value | json }}</pre>

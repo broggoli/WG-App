@@ -20,13 +20,13 @@ export class CryptoService {
 
   encryptForDB(data: userData, password: string): enryptedData{
     return  {
-                ziviDataHeader: this.getZiviDataHeader(data.email, password),
+                ziviDataHeader: this.getUserPointer(data.email, password),
                 encryptedZiviData: this.encryptData(data, password)
             }
     }
     //returns the name concatonated with the password as a sha256 hash
-    getZiviDataHeader(email: string, password: string): string{
-                                return crypto.SHA256(email + password)
+    getUserPointer(userName: string, password: string): string{
+                                return crypto.SHA256(userName + password)
                                 .toString()}
 
     // Gets an encrypted String that is returned as a parsed Object
