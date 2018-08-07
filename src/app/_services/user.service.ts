@@ -26,7 +26,13 @@ export class UserService {
   }
 
   
-  
+  deleteUser(userPointer: string) {
+    const postData = {
+      data: userPointer,
+      task: "deleteUser"
+    }
+    return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
+  }
   saveNewUser(userData: UserData, password: string){
     console.log(userData)
     //hashing the name and encrypt with password so it can't easily be read out of the db

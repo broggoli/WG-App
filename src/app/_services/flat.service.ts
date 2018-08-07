@@ -4,6 +4,11 @@ import { HttpClient } from "@angular/common/http"
 import { CryptoService } from './crypto.service'
 import { Flat } from "../models/flat.model"
 
+interface Response {
+  message: string,
+  success: boolean,
+  data: any
+}
 @Injectable({
   providedIn: 'root'
 })

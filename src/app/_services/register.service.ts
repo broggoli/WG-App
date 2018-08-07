@@ -1,8 +1,7 @@
 // Angluar imports
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from "rxjs"
-import { of } from "rxjs"
+import { Observable, of } from "rxjs"
 
 // Services
 import { CryptoService } from './crypto.service'
@@ -171,7 +170,6 @@ export class RegisterService {
   generateNewUser(): Observable<Response> {
     const userData: UserData = this.getUserData()
     const PW =  this.registerData.userData.passwords.PW
-    const userName =  this.registerData.userData.names.userName
     
     const userDataVal = validateUserData(userData)
     const passwordVal = validatePassword(PW)
@@ -184,22 +182,42 @@ export class RegisterService {
         message: "User data not valid!",
         data: null
       }
-      const resObs = of(res)
       console.log(userDataVal.message)
-      return resObs
+      // making an observable out of the response object
+      return of(res)
     }
   }
 
   generateNewFlat() {
-    if( this.registerData.join === false){
-      this.generateNewUser().subscribe(res => {
-        if( res.success === true){
-          this.flat.saveNewFlat( this.registerData.flatData).subscribe( data => {
-            console.log(data)
+    // Check whether the user chose to generate a new flat or not
+    if( this.registerData.join === false) {
+      //Generate the user and if that's successful generate the flat
+      return this.generateNewUser().subscribe(res1 => {
+        if( res1.success === true){
+          this.flat.saveNewFlat( this.registerData.flatData).subscribe( res2 => {
+            if( res2.success == true){
+              return {
+                success: true,
+                message: "User and Flat successfully registered"
+              }
+            }else{
+              return {
+                success: false,
+                message: "Flat could not be generated. Reversed Register"
+              }
+            }
           })
-        }else{
-          
-        console.log(res)
+        }else {
+          // TODO: deleteUser for auth.php
+          const PW =  this.registerData.userData.passwords.PW
+          const userName =  this.registerData.userData.names.userName
+          const userPointer = this.crypto.getUserPointer(userName, PW)
+          this.user.deleteUser(userPointer)
+          return {
+            success: false,
+            message: "User could not be registered. Reversed Register!"
+          }
+          console.log(res1)
         }
       })
     }else{
