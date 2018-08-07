@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as crypto from 'crypto-js';
-import { UserData } from "../modules/user.module"
+import { UserData } from "../models/user.model"
 
 interface userData{
     surname: string ,

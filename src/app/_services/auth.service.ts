@@ -1,34 +1,56 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { CryptoService } from './crypto.service'
+import { UserData } from '../models/user.model'
 
-interface myData {
-    success: boolean,
-    message: string
+interface Response {
+  success: boolean,
+  message: string,
+  data: string
 }
 
+interface LoginStatus {
+  local: boolean,
+  online: any
+}
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private loggedInStatus = JSON.parse(localStorage.getItem("loggedIn")
-                                        || "false")
+  constructor(private crypto: CryptoService,
+    private http: HttpClient) { }
 
-  constructor(private http: HttpClient) { }
-
-  setLoggedIn(status: boolean){
-      this.loggedInStatus = status
-      localStorage.setItem("loggedIn", "true")
+  saveData(data: string, password: string){
+    const decryptedData: UserData = JSON.parse(this.crypto.decryptData(data, password))
+    localStorage.setItem("userData", JSON.stringify(decryptedData))
+    console.log(localStorage.getItem("userData"))
   }
-  // get acts like a propertyname even thiugh it's a function
-  get isLoggedIn(){
-    return JSON.parse(  localStorage.getItem("loggedIn") ||
-                        this.loggedInStatus.toString())
+  /// get acts like a property name even though it's a function
+  get isLoggedIn(): LoginStatus {
+    if( localStorage.getItem("userData") !== null ){
+      return {  
+                local: true,
+                online: this.http.post<Response>('/api/php/auth.php', JSON.stringify({task: 'isLoggedIn'}))
+            }
+    }else{
+      return {  
+          local: false,
+          online: null
+        }
+    }
   }
 
-  getUserDetails(formData) {
+  login(userName: string, password: string) {
+    const pointer = JSON.stringify({
+      data:
+      {
+        'pointer': this.crypto.getUserPointer(userName, password)
+      },
+      task: "login"
+    })
     // post these details to API server return user info if correct
-    return this.http.post('/api/auth.php', formData)
+    return this.http.post<Response>('/api/php/auth.php', pointer)
   }
 
 }

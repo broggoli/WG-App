@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http"
 
 import { CryptoService } from './crypto.service'
-import { Flat } from "../modules/flat.module"
+import { Flat } from "../models/flat.model"
 
 @Injectable({
   providedIn: 'root'
@@ -34,11 +34,11 @@ export class FlatService {
   }
     const postData = {
       data: dbData,
-      task: "saveNewFlat"
+      task: "registerFlat"
     }
-    console.log(newFlat)
+    console.log(newFlat, dbData)
     // post these details to API server return
-    return this.http.post<Response>('/api/php/register.php', JSON.stringify(postData))
+    return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
   }
 
   generateFlatCode(){

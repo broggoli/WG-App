@@ -1,6 +1,8 @@
 // Angluar imports
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from "rxjs"
+import { of } from "rxjs"
 
 // Services
 import { CryptoService } from './crypto.service'
@@ -9,14 +11,18 @@ import { FlatService } from './flat.service'
 
 // Modules
 import { RegisterData, 
-        RegiterUserData} from "../modules/register.model"
-import { UserData } from "../modules/user.module"
+        RegiterUserData} from "../models/register.model"
+import { UserData } from "../models/user.model"
 
 interface ValidationMessage {
   message: string;
   valid: boolean;
 }
-
+interface Response {
+  message: string,
+  success: boolean,
+  data: any
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -162,7 +168,7 @@ export class RegisterService {
     this.registerData.flatData.name = flatName
   }
 
-  generateNewUser() {
+  generateNewUser(): Observable<Response> {
     const userData: UserData = this.getUserData()
     const PW =  this.registerData.userData.passwords.PW
     const userName =  this.registerData.userData.names.userName
@@ -171,19 +177,30 @@ export class RegisterService {
     const passwordVal = validatePassword(PW)
 
     if( userDataVal.valid === true && passwordVal.valid === true){
-      const saveNewUser = this.user.saveNewUser(userData, PW).subscribe( data => {
-        console.log(data)
-      })
+      return this.user.saveNewUser(userData, PW)
     }else{
+      const res: Response = { 
+        success: false,
+        message: "User data not valid!",
+        data: null
+      }
+      const resObs = of(res)
       console.log(userDataVal.message)
+      return resObs
     }
   }
 
   generateNewFlat() {
     if( this.registerData.join === false){
-      this.generateNewUser()
-      this.flat.saveNewFlat( this.registerData.flatData).subscribe( data => {
-        console.log(data)
+      this.generateNewUser().subscribe(res => {
+        if( res.success === true){
+          this.flat.saveNewFlat( this.registerData.flatData).subscribe( data => {
+            console.log(data)
+          })
+        }else{
+          
+        console.log(res)
+        }
       })
     }else{
       console.log("Join isnt set to false!")
@@ -208,7 +225,6 @@ export class RegisterService {
   getUserData(): UserData{
     const userData = this.registerData.userData;
     return  {
-                pointer: "",
                 names:  processNames(userData.names)
             }
   }

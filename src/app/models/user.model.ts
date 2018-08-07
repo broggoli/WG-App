@@ -1,5 +1,4 @@
 export class UserData{
-    pointer: string
     names: {
       firstName:  string;
       lastName:   string;
@@ -7,5 +6,6 @@ export class UserData{
     };
 }
 export class User {
-
+  pointer: string;
+  userData: UserData
 }
