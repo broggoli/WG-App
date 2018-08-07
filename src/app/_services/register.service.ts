@@ -25,6 +25,7 @@ export class RegisterService {
   // Form Position
   registerData: RegisterData;
   errorMessage: string;
+  startstep: string
 
   constructor(private crypto: CryptoService,
               private user: UserService,
@@ -34,7 +35,7 @@ export class RegisterService {
     this.registerData = this.getRegisterData
     this.setStartStep = "newOrJoin"
     this.errorMessage = ""
-    //this.steps = ["addFlatMates"]
+    this.startstep = "newOrJoin"
   }
   
   get getRegisterData() {
@@ -80,7 +81,7 @@ export class RegisterService {
     if( savedStack ){
       return <string[]>JSON.parse(savedStack)
     }else{
-      return [];
+      return [this.startstep];
     }
   }
   set addStep(step: string) {
