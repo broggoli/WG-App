@@ -14,7 +14,7 @@
       switch ($request_body->task) {
         case "login":
           $pointer =  filter_var($request_body->data->pointer, FILTER_SANITIZE_STRING);
-          $userData = $dbInterface.getUserData($pointer);
+          $userData = $dbInterface->getUserData($pointer);
         
           if( $userData->success ){
             $userData->data["pointer"] = $pointer;
@@ -26,7 +26,7 @@
           break;
 
         case "registerFlat":
-          $userData = (object) $request_body->data->encryptedData;
+          $userData = (string) $request_body->data->encryptedData;
           $pointer = (string) $request_body->data->pointer;
 
           $registerFlat = $dbInterface->registerFlat( $pointer, $userData);
@@ -34,12 +34,20 @@
           break;
 
         case "registerUser":
-          $userData = (object) $request_body->data->encryptedData;
+          $userData = (string) $request_body->data->encryptedData;
           $pointer = (string) $request_body->data->pointer;
 
-          $registerUser = $dbInterface->registerUser( $pointer, $userData);
+          $registerUser = $dbInterface->registerUser( $pointer, $userData );
           $response = $registerUser;
           break;
+
+        case "deleteUser":
+          $pointer = (string) $request_body->data->pointer;
+
+          $deleteUser = $dbInterface->deleteUser( $pointer );
+          $response = $deleteUser;
+          break;
+
         case "isLoggedIn":
           if( isset($_SESSION['user']) && !empty($_SESSION['user']) ) {
             $response->success = true;

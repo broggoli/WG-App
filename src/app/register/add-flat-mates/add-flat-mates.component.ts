@@ -3,7 +3,7 @@ import { RegisterService } from "../../_services"
 import {  FormControl, 
           FormGroup, 
           Validators } from '@angular/forms';
-import { FlatMateRegister } from '../../modules/register.model';
+import { FlatMateRegister } from '../../models/register.model';
 
 @Component({
   selector: 'app-add-flat-mates',
@@ -27,11 +27,9 @@ export class AddFlatMatesComponent implements OnInit {
   
   createFormControls(){
     this.mateFirstName = new FormControl("",
-              [ Validators.required
+              [ Validators.minLength(1)
               ])
-    this.mateLastName = new FormControl("",
-              [ Validators.required
-              ])
+    this.mateLastName = new FormControl("")
   }
   createForm(){
     this.addFlatMatesForm = new FormGroup({

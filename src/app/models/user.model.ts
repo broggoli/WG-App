@@ -4,6 +4,7 @@ export class UserData{
       lastName:   string;
       userName:   string;
     };
+    flatCode: string
 }
 export class User {
   pointer: string;

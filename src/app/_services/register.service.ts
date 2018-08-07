@@ -1,12 +1,13 @@
 // Angluar imports
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable, of } from "rxjs"
 
 // Services
 import { CryptoService } from './crypto.service'
 import { UserService } from './user.service'
 import { FlatService } from './flat.service'
+import { AuthService } from './auth.service'
 
 // Modules
 import { RegisterData, 
@@ -34,8 +35,9 @@ export class RegisterService {
 
   constructor(private crypto: CryptoService,
               private user: UserService,
+              private auth: AuthService,
               private flat: FlatService,
-              private activatedRoute: ActivatedRoute) {
+              private router: Router) {
 
     this.registerData = this.getRegisterData
     this.setStartStep = "newOrJoin"
@@ -192,10 +194,23 @@ export class RegisterService {
     // Check whether the user chose to generate a new flat or not
     if( this.registerData.join === false) {
       //Generate the user and if that's successful generate the flat
-      return this.generateNewUser().subscribe(res1 => {
-        if( res1.success === true){
-          this.flat.saveNewFlat( this.registerData.flatData).subscribe( res2 => {
-            if( res2.success == true){
+      return this.generateNewUser().subscribe( registerUserRes => {
+        const userData: UserData = this.getUserData()
+        const PW =  this.registerData.userData.passwords.PW
+        const userName =  userData.names.userName
+        const userPointer = this.crypto.getUserPointer(userName, PW)
+        if( registerUserRes.success === true){
+          this.flat.saveNewFlat( this.registerData.flatData, userPointer, userData.flatCode ).subscribe( registerFlatRes => {
+            if( registerFlatRes.success == true){
+              this.auth.login(userName, PW).subscribe( loginRes => {
+                if( loginRes.success === true) {
+                  this.auth.saveData( "userData", loginRes.data.data, PW)
+                  console.log("asd")
+                  this.router.navigate([""])
+                }else{
+                  console.log(loginRes)
+                }
+              })
               return {
                 success: true,
                 message: "User and Flat successfully registered"
@@ -208,16 +223,12 @@ export class RegisterService {
             }
           })
         }else {
-          // TODO: deleteUser for auth.php
-          const PW =  this.registerData.userData.passwords.PW
-          const userName =  this.registerData.userData.names.userName
-          const userPointer = this.crypto.getUserPointer(userName, PW)
           this.user.deleteUser(userPointer)
+          console.log(registerUserRes)
           return {
             success: false,
             message: "User could not be registered. Reversed Register!"
           }
-          console.log(res1)
         }
       })
     }else{
@@ -243,7 +254,8 @@ export class RegisterService {
   getUserData(): UserData{
     const userData = this.registerData.userData;
     return  {
-                names:  processNames(userData.names)
+                names:  processNames(userData.names),
+                flatCode: this.flat.generateFlatCode()
             }
   }
 }
@@ -251,7 +263,7 @@ export class RegisterService {
 function processNames(names): any{
   let processedNames = {};
   for(let name in names) {
-    processedNames[name] = names[name].trim().toLowerCase()
+    processedNames[name] = names[name].trim()
   }
   return processedNames
 }

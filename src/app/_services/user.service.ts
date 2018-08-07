@@ -28,7 +28,9 @@ export class UserService {
   
   deleteUser(userPointer: string) {
     const postData = {
-      data: userPointer,
+      data: {
+        poiner: userPointer
+      },
       task: "deleteUser"
     }
     return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
@@ -50,7 +52,7 @@ export class UserService {
   }
 
   logout() {
-    return this.http.get<logoutStatus>("/api/logout.php")
+    return this.http.get<logoutStatus>("/api/php/logout.php")
   }
 
 }

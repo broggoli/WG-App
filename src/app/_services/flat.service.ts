@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http"
 
 import { CryptoService } from './crypto.service'
 import { Flat } from "../models/flat.model"
+import { FlatData } from '../models/register.model';
 
 interface Response {
   message: string,
@@ -25,12 +26,13 @@ export class FlatService {
     console.log(userPointer, flatCode)
   }
 
-  saveNewFlat(flatData){
-    let newFlat: Flat
-    newFlat = {
-      flatPointer : this.generateFlatCode(),
+  saveNewFlat( flatData: FlatData, firstResident: string, flatCode: string ){
+    // firstResident is the pointer to the user who is generating this flat
+    const newFlat: Flat = {
+      flatPointer : this.crypto.hash(flatCode),
       name : flatData.name,
-      mates : []
+      residents : [firstResident],
+      flatCode
     }
     //hashing the name and encrypt with password so it can't easily be read out of the db
     const dbData = {

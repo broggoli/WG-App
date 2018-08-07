@@ -69,7 +69,6 @@
       $saveNewFlatData = $this->saveData("flat_db", $flatPointer, $data);
       //Check whether the data header exists
       if($saveNewFlatData->success != true){
-        echo json_encode($saveNewFlatData);
         $saveNewFlatData->message = "This flat already exists";
       }else{
         $saveNewFlatData->message = "New flat successufully saved!";
@@ -106,6 +105,7 @@
         $newDataEntry = new StdClass();
 
         $newDataEntry->initializedTime = time();
+        $newDataEntry->manipulatedTime = time();
         $newDataEntry->data = $data;
   
         $dBObject->{$pointer} = $newDataEntry;
@@ -147,7 +147,7 @@
       return $response;
     }
     /* Replaces the data from the given db when given a pointer that is in it */
-    private function replaceData( $db_name, $pointer, $data) {
+    private function replaceData( $db_name, $pointer, $data ) {
 
       $response = new StdClass();
       $response->success = false;
