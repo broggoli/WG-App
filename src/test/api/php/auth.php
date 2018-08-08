@@ -26,11 +26,24 @@
           break;
 
         case "registerFlat":
-          $userData = (string) $request_body->data->encryptedData;
+          $flatData = (string) $request_body->data->encryptedData;
           $pointer = (string) $request_body->data->pointer;
 
-          $registerFlat = $dbInterface->registerFlat( $pointer, $userData);
+          $registerFlat = $dbInterface->registerFlat( $pointer, $flatData);
           $response = $registerFlat;
+          break;
+        
+        case "getFlatData":
+          $pointer =  filter_var($request_body->data->pointer, FILTER_SANITIZE_STRING);
+          $flatData = $dbInterface->getFlatData( $pointer );
+        
+          if( $flatData->success ){
+            $flatData->data["pointer"] = $pointer;
+            $_SESSION['flat'] = $flatData->data;
+            $response = $flatData;
+          }else{
+            $response->message = $flatData->message;
+          }
           break;
 
         case "registerUser":

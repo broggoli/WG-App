@@ -34,6 +34,7 @@ export class FlatService {
       residents : [firstResident],
       flatCode
     }
+    console.log(this.crypto.hash(flatCode))
     //hashing the name and encrypt with password so it can't easily be read out of the db
     const dbData = {
       pointer: newFlat.flatPointer,
@@ -48,6 +49,17 @@ export class FlatService {
     return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
   }
 
+  getFlatDataOnline( flatCode ) {
+    const flatPointer = this.crypto.hash(flatCode)
+    const postData = {
+      data: {
+        pointer: flatPointer
+      },
+      task: "getFlatData"
+    }
+    console.log(flatPointer,flatCode)
+    return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
+  }
   generateFlatCode(){
     var code = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789ÄÖÜäöü!£&%{}";

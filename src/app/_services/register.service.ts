@@ -32,6 +32,7 @@ export class RegisterService {
   registerData: RegisterData;
   errorMessage: string;
   startstep: string
+  flatCode: string
 
   constructor(private crypto: CryptoService,
               private user: UserService,
@@ -170,6 +171,7 @@ export class RegisterService {
   }
 
   generateNewUser(): Observable<Response> {
+    this.flatCode = this.flat.generateFlatCode()
     const userData: UserData = this.getUserData()
     const PW =  this.registerData.userData.passwords.PW
     
@@ -255,7 +257,7 @@ export class RegisterService {
     const userData = this.registerData.userData;
     return  {
                 names:  processNames(userData.names),
-                flatCode: this.flat.generateFlatCode()
+                flatCode: this.flatCode
             }
   }
 }

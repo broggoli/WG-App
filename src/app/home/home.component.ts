@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { UserData } from "../models/user.model"
+import { Flat } from "../models/flat.model"
+import {  UserService,
+          FlatService } from '../_services'
 
 @Component({
   selector: 'app-home',
@@ -7,10 +11,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  userData: UserData
+  flatData: Flat
+  constructor( private user: UserService,
+                private flat: FlatService ) { }
 
   ngOnInit() {
     console.log("home loaded")
+    this.userData = JSON.parse(localStorage.getItem("userData"))
+    this.flat.getFlatDataOnline( this.userData.flatCode ).subscribe( res => {
+      this.flatData = res.data
+    })
   }
+
+  
 
 }

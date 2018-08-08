@@ -13,7 +13,7 @@ interface Response {
 
 interface LoginStatus {
   local: boolean,
-  online: Observable<Response>
+  online: Observable<boolean>
 }
 @Injectable({
   providedIn: 'root'
@@ -29,18 +29,26 @@ export class AuthService {
     console.log(localStorage.getItem(whatToSave))
   }
   /// get acts like a property name even though it's a function
-  get isLoggedIn(): Observable<LoginStatus> {
+  get isLoggedIn(): LoginStatus {
     if( localStorage.getItem("userData") !== null ){
       console.log(localStorage.getItem("userData"))
-      return of({  
+      return {  
                 local: true,
-                online: this.http.post<Response>('/api/php/auth.php', JSON.stringify({task: 'isLoggedIn'}))
-            })
+                online: this.http.post<Response>('/api/php/auth.php', JSON.stringify({task: 'isLoggedIn'})).pipe(map( res => {
+                    if( res.success === true ) {
+                      if( JSON.parse(res.data) === true ) {
+                        return true
+                      }else {
+                        return false
+                      }
+                    }
+                }))
+            }
     }else{
-      return of({  
+      return {  
           local: false,
-          online: null
-        })
+          online: of(false)
+        }
     }
   }
 

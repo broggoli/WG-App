@@ -27,10 +27,8 @@ export class CryptoService {
   }
   //returns the name concatonated with the password as a sha256 hash
   getUserPointer(userName: string, password: string): string {
-    console.log(userName, password, crypto.SHA256(userName + password)
-    .toString())
-    return crypto.SHA256(userName + password)
-      .toString()
+    console.log(userName, password, this.hash(userName + password))
+    return this.hash(userName + password)
   }
 
   // Gets an encrypted String that is returned as a parsed Object
@@ -47,6 +45,7 @@ export class CryptoService {
   };
 
   hash(str: string): string {
+    console.log( str, crypto.SHA256(str).toString())
     return crypto.SHA256(str).toString()
   }
 }

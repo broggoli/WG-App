@@ -21,8 +21,8 @@ export class UserService {
   constructor(private crypto: CryptoService,
               private http: HttpClient) { }
 
-  getSomeData() {
-      return this.http.get<Response>("/api/database.php")
+  getUserData() {
+      return this.http.get<Response>("/api/auth.php")
   }
 
   
