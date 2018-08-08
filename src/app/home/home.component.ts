@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserData } from "../models/user.model"
 import { Flat } from "../models/flat.model"
 import {  UserService,
-          FlatService } from '../_services'
+          FlatService,
+          CryptoService } from '../_services'
 
 @Component({
   selector: 'app-home',
@@ -12,15 +13,16 @@ import {  UserService,
 export class HomeComponent implements OnInit {
 
   userData: UserData
-  flatData: Flat
+  flatData: string
   constructor( private user: UserService,
+    private crypto: CryptoService,
                 private flat: FlatService ) { }
 
   ngOnInit() {
     console.log("home loaded")
     this.userData = JSON.parse(localStorage.getItem("userData"))
     this.flat.getFlatDataOnline( this.userData.flatCode ).subscribe( res => {
-      this.flatData = res.data
+      this.flatData = this.crypto.decryptData(res.data.data, this.userData.flatCode)
     })
   }
 

@@ -24,6 +24,7 @@ export class AuthService {
     private http: HttpClient) { }
 
   saveData( whatToSave: string, data: string, key: string){
+    console.log(data+"WSasdasdad")
     const decryptedData: UserData = JSON.parse(this.crypto.decryptData(data, key))
     localStorage.setItem(whatToSave, JSON.stringify(decryptedData))
     console.log(localStorage.getItem(whatToSave))

@@ -6,3 +6,4 @@ export * from './auth.service';
 export * from './user.service';
 export * from './register.service';
 export * from './flat.service'
+export * from './crypto.service'

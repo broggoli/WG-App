@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { AlertComponent } from './alert/alert.component';
 import { HomeComponent } from './home/home.component';
-import { AdminComponent } from './admin/admin.component';
 import { LogoutComponent } from './logout/logout.component';
 import { RegisterComponent } from './register/register.component';
 
@@ -29,7 +28,6 @@ import { FlatRegisterComponent } from './register/flat-register/flat-register.co
     LoginComponent,
     AlertComponent,
     HomeComponent,
-    AdminComponent,
     LogoutComponent,
     RegisterComponent,
     NewOrJoinComponent,
