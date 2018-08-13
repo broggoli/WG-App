@@ -21,6 +21,7 @@ import { RegisterUserComponent } from './register-user/register-user.component';
 import { AddFlatMatesComponent } from './add-flat-mates/add-flat-mates.component';
 import { EnterCodeComponent } from './enter-code/enter-code.component';
 import { FlatRegisterComponent } from './flat-register/flat-register.component';
+import { AddReceiptItemComponent } from './add-receipt-item/add-receipt-item.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { FlatRegisterComponent } from './flat-register/flat-register.component';
     RegisterUserComponent,
     AddFlatMatesComponent,
     EnterCodeComponent,
-    FlatRegisterComponent
+    FlatRegisterComponent,
+    AddReceiptItemComponent
   ],
   imports: [
     BrowserModule,
