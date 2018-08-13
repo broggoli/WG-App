@@ -44,7 +44,6 @@ export class CryptoService {
   };
 
   hash(str: string): string {
-    console.log( str, crypto.SHA256(str).toString())
     return crypto.SHA256(str).toString()
   }
 }

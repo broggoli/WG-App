@@ -1,15 +1,18 @@
 <div id="app">
     <header>
-        <div id="title">
+        <div id="burger-menu">
             <h4>B-Achtung</h4>
             <h3>WG-APP</h3>
         </div>
-        <button id="logOutButton" routerLink="logout" class="button">Abmelden</button>
+        <button *ngIf="loggedIn"
+            id="logOutButton" 
+            routerLink="logout" 
+            class="button">Abmelden</button>
     </header>
 
     <!-- This is the content area. The individual pages are loded in here-->
     <div id="content">
-        <router-outlet></router-outlet>
+        <router-outlet (activate)="onRoutesChanged()"></router-outlet>
     </div>
 
     <div id="footer">

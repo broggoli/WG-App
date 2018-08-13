@@ -76,7 +76,7 @@
       return $saveNewFlatData;
     }
     function replaceFlatData( $flatPointer, $data ) {
-      $replaceFlatData = $this->replaceData("flat_db", $userPointer, $data);
+      $replaceFlatData = $this->replaceData("flat_db", $flatPointer, $data);
       //Check whether the data header exists
       if($replaceFlatData->success != true){
         $replaceFlatData->message = "No data to this pointer found!";
@@ -137,7 +137,7 @@
         unset($dBObject->{$pointer});
   
         // encode array to json and save to file
-        file_put_contents($db_path.$dbName.".json", json_encode($dBObject));
+        file_put_contents($db_path.$db_name.".json", json_encode($dBObject));
   
         $response->message = "Data successsfully deleted.";
         $response->success = true;
@@ -155,17 +155,20 @@
       $dBObject = $this->getDB( $db_name );
   
       $deleteData = $this->deleteData( $db_name, $pointer );
-      $saveData = $this->saveData( $db_name, $pointer, $data );
-  
-      if( $deleteData->success != true){
-        return $deleteData;
-      }else if( $saveData->success != true){
-          return $saveUser;
-      }else{
-        // Successfully deleted and resaved data
-        $response->message = "Successfully replaced user data.";
-        $response->success = true;
+      
+      if( $deleteData->success == true ) {
+        $saveData = $this->saveData( $db_name, $pointer, $data );
+        if( $saveData->success == true ){
+          // Successfully deleted and resaved data
+          $response->message = "Successfully replaced user data.";
+          $response->success = true;
+        } else {
+          $response = $saveData;
+        }
+      }else {
+        $response = $deleteData;
       }
+      return $response;
     }
     /* returns the Data saved in the jsn data base with the $pointer as key*/
     private function getDataFromDB( $dbName, $pointer ) {

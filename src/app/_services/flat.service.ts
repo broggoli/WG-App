@@ -4,6 +4,8 @@ import { HttpClient } from "@angular/common/http"
 import { CryptoService } from './crypto.service'
 import { Flat } from "../models/flat.model"
 import { FlatData } from '../models/register.model';
+import { map, switchMap, tap } from '../../../node_modules/rxjs/operators';
+import { Observable, of } from '../../../node_modules/rxjs';
 
 interface Response {
   message: string,
@@ -22,10 +24,44 @@ export class FlatService {
       this.flatCodeLength = 6
     }
 
-  linkFlatToUser(flatCode: string, userPointer: string) {
-    console.log(userPointer, flatCode)
+  linkFlatToUser(flatCode: string, userPointer: string): Observable<Response> {
+
+    return this.update( this.crypto.hash(flatCode), this.getFlatDataOnline(flatCode).pipe(map( res => {
+      let flatData: Flat = JSON.parse(this.crypto.decryptData(res.data.data, flatCode))
+      if( flatData.residents.indexOf( userPointer ) === -1) {
+        flatData.residents.push(userPointer) 
+      }else {
+        console.log("error: this user already exists!")
+      }
+      return flatData
+    }))
+    )
   }
 
+  exists( flatCode: string): Observable<boolean>{
+    return this.getFlatDataOnline(flatCode).pipe(map( flatDataRes => {
+      return flatDataRes.success
+    }))
+  }
+
+  update( pointer: string, updatedData: Observable<Flat>): Observable<Response> {
+
+    //hashing the name and encrypt with password so it can't easily be read out of the db
+    return updatedData.pipe(switchMap( newData => {
+      const dbData = {
+        pointer,
+        encryptedData: this.crypto.encryptData(newData, newData.flatCode)
+      }
+      const postData = {
+        data: dbData,
+        task: "updateFlat"
+      }
+      console.log(JSON.stringify(postData), updatedData)
+
+    // post these details to API server return
+    return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
+    }))
+  }
   saveNewFlat( flatData: FlatData, firstResident: string, flatCode: string ){
     // firstResident is the pointer to the user who is generating this flat
     const newFlat: Flat = {
@@ -34,17 +70,16 @@ export class FlatService {
       residents : [firstResident],
       flatCode
     }
-    console.log(this.crypto.hash(flatCode))
+    
     //hashing the name and encrypt with password so it can't easily be read out of the db
     const dbData = {
       pointer: newFlat.flatPointer,
-      encryptedData: this.crypto.encryptData(newFlat, newFlat.flatPointer)
+      encryptedData: this.crypto.encryptData(newFlat, newFlat.flatCode)
   }
     const postData = {
       data: dbData,
       task: "registerFlat"
     }
-    console.log(newFlat, dbData)
     // post these details to API server return
     return this.http.post<Response>('/api/php/auth.php', JSON.stringify(postData))
   }

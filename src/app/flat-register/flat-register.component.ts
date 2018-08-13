@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { RegisterService } from "../../_services"
+import { RegisterService } from "../_services"
 
 @Component({
   selector: 'app-flat-register',
@@ -12,7 +12,7 @@ export class FlatRegisterComponent implements OnInit {
   flatDetailsForm: FormGroup
   flatName: FormControl
 
-  constructor(private register: RegisterService) { }
+  constructor(public register: RegisterService) { }
 
   ngOnInit() {
     this.createFormControls()

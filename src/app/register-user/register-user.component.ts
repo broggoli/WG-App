@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RegisterService } from "../../_services"
+import { RegisterService } from "../_services"
 
 @Component({
   selector: 'app-register-user',
@@ -18,7 +18,7 @@ export class RegisterUserComponent implements OnInit {
   PW: FormControl
   confirmPW: FormControl
   
-  constructor(private register: RegisterService) { }
+  constructor(public register: RegisterService) { }
 
   ngOnInit() {
     this.createFormControls();

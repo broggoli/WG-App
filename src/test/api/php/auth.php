@@ -38,12 +38,19 @@
           $flatData = $dbInterface->getFlatData( $pointer );
         
           if( $flatData->success ){
-            $flatData->data["pointer"] = $pointer;
             $_SESSION['flat'] = $flatData->data;
             $response = $flatData;
           }else{
             $response->message = $flatData->message;
           }
+          break;
+        
+        case "updateFlat": 
+          $pointer =  filter_var($request_body->data->pointer, FILTER_SANITIZE_STRING);
+          $newData = (string) $request_body->data->encryptedData;
+            
+          $updateData = $dbInterface->replaceFlatData( $pointer, $newData );
+          $response = $updateData;
           break;
 
         case "registerUser":

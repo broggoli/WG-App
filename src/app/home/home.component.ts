@@ -13,7 +13,7 @@ import {  UserService,
 export class HomeComponent implements OnInit {
 
   userData: UserData
-  flatData: string
+  flatData: Flat
   constructor( private user: UserService,
     private crypto: CryptoService,
                 private flat: FlatService ) { }
@@ -21,8 +21,14 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log("home loaded")
     this.userData = JSON.parse(localStorage.getItem("userData"))
+    this.flatData = {
+      flatPointer: "",
+      name: "",
+      residents: [],
+      flatCode: ""
+    }
     this.flat.getFlatDataOnline( this.userData.flatCode ).subscribe( res => {
-      this.flatData = this.crypto.decryptData(res.data.data, this.userData.flatCode)
+      this.flatData = JSON.parse(this.crypto.decryptData(res.data.data, this.userData.flatCode))
     })
   }
 

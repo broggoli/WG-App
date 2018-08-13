@@ -56,7 +56,6 @@ export class RegisterService {
       regData = {
         join: undefined,
         flatCode: "",
-        flatCodeHash: "",
         userData: {
           names:{
             firstName: "",
@@ -109,7 +108,6 @@ export class RegisterService {
   enterCode(code: string) {
     if( validateCode(code) ){
       this.registerData.flatCode = code;
-      this.registerData.flatCodeHash = this.crypto.hash(code);
       this.addStep = "enterUserData"
       this.tempSaveUserData()
     }
@@ -155,7 +153,6 @@ export class RegisterService {
       this.addStep ="addFlatMates"
     }else if( this.registerData.join === true){
       this.registerUserInExistingFlat();
-      console.log("Registering user in existing Flat")
     }else{
       console.log("Join not definded: " + this.registerData.join)
     }
@@ -170,8 +167,12 @@ export class RegisterService {
     this.registerData.flatData.name = flatName
   }
 
-  generateNewUser(): Observable<Response> {
-    this.flatCode = this.flat.generateFlatCode()
+  generateNewUser(flatCode: string = ""): Observable<Response> {
+    if( flatCode && flatCode != "") {
+      this.flatCode = flatCode
+    } else {
+      this.flatCode = this.flat.generateFlatCode()
+    }
     const userData: UserData = this.getUserData()
     const PW =  this.registerData.userData.passwords.PW
     
@@ -201,18 +202,12 @@ export class RegisterService {
         const PW =  this.registerData.userData.passwords.PW
         const userName =  userData.names.userName
         const userPointer = this.crypto.getUserPointer(userName, PW)
+
         if( registerUserRes.success === true){
           this.flat.saveNewFlat( this.registerData.flatData, userPointer, userData.flatCode ).subscribe( registerFlatRes => {
             if( registerFlatRes.success == true){
-              this.auth.login(userName, PW).subscribe( loginRes => {
-                if( loginRes.success === true) {
-                  this.auth.saveData( "userData", loginRes.data.data, PW)
-                  console.log("asd")
-                  this.router.navigate([""])
-                }else{
-                  console.log(loginRes)
-                }
-              })
+
+              this.login(userName, PW)
               return {
                 success: true,
                 message: "User and Flat successfully registered"
@@ -240,16 +235,39 @@ export class RegisterService {
 
   registerUserInExistingFlat() {
     if( this.registerData.join === true){
-      this.generateNewUser()
-      const userData: UserData = this.getUserData()
-      const PW =  this.registerData.userData.passwords.PW
-      const userName =  this.registerData.userData.names.userName
-      
-      const userPointer = this.user.getUserPointer(userName, PW)
-      this.flat.linkFlatToUser(this.registerData.flatCode, userPointer)
 
+      // First check if there is a Flat with the given flatCode
+    
+    const flatCode = this.registerData.flatCode
+    this.flat.exists( flatCode ).subscribe( exists => {
+
+      if( exists === true ) {
+        const PW =  this.registerData.userData.passwords.PW
+        const userName =  this.registerData.userData.names.userName
+
+        this.generateNewUser( flatCode ).subscribe( registerUserRes => {
+          if( registerUserRes.success === true) {
+            console.log("Registering user in existing Flat", registerUserRes)
+            const userPointer = this.crypto.getUserPointer(userName, PW)
+
+            this.flat.linkFlatToUser(flatCode, userPointer).subscribe( linkUserRes => {
+              console.log(linkUserRes)
+              if( linkUserRes.success === true) {
+                this.login(userName, PW)
+              }else{
+                console.log("An error occured")
+              }
+            })
+          }else{
+            console.log(registerUserRes)
+          }
+        })
+      } else {
+        console.log("Error: Flat code doesn't match any existing flat")
+      }
+    })
     }else{
-      console.log("Join isnt set to true!")
+      console.log("Join isn't set to true!")
     }
   }
 
@@ -259,6 +277,16 @@ export class RegisterService {
                 names:  processNames(userData.names),
                 flatCode: this.flatCode
             }
+  }
+  login(userName, PW) {
+    this.auth.login(userName, PW).subscribe( loginRes => {
+      if( loginRes.success === true) {
+        this.auth.saveData( "userData", loginRes.data.data, PW)
+        this.router.navigate([""])
+      }else{
+        console.log(loginRes)
+      }
+    })
   }
 }
 

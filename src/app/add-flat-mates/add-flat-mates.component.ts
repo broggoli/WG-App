@@ -1,9 +1,9 @@
 import { Component, OnInit, } from '@angular/core';
-import { RegisterService } from "../../_services"
+import { RegisterService } from "../_services"
 import {  FormControl, 
           FormGroup, 
           Validators } from '@angular/forms';
-import { FlatMateRegister } from '../../models/register.model';
+import { FlatMateRegister } from '../models/register.model';
 
 @Component({
   selector: 'app-add-flat-mates',
@@ -17,7 +17,7 @@ export class AddFlatMatesComponent implements OnInit {
   mateLastName: FormControl
   flatMates: FlatMateRegister[]
 
-  constructor(private register: RegisterService) { }
+  constructor(public register: RegisterService) { }
 
   ngOnInit() {
     this.createFormControls()

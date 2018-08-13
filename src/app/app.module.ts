@@ -16,11 +16,11 @@ import { UserService } from "./_services"
 import { AuthService } from "./_services"
 
 import { AuthGuard } from "./auth.guard";
-import { NewOrJoinComponent } from './register/new-or-join/new-or-join.component';
-import { RegisterUserComponent } from './register/register-user/register-user.component';
-import { AddFlatMatesComponent } from './register/add-flat-mates/add-flat-mates.component';
-import { EnterCodeComponent } from './register/enter-code/enter-code.component';
-import { FlatRegisterComponent } from './register/flat-register/flat-register.component';
+import { NewOrJoinComponent } from './new-or-join/new-or-join.component';
+import { RegisterUserComponent } from './register-user/register-user.component';
+import { AddFlatMatesComponent } from './add-flat-mates/add-flat-mates.component';
+import { EnterCodeComponent } from './enter-code/enter-code.component';
+import { FlatRegisterComponent } from './flat-register/flat-register.component';
 
 @NgModule({
   declarations: [

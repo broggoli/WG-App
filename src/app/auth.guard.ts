@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from "@angular/router"
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AuthService } from "./_services"
 
 @Injectable({
@@ -15,18 +15,11 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
-    // If the user isn't logged in he gets redirected to the main login page
-    const loginStatus = this.Auth.isLoggedIn
-    if( loginStatus.local === true ) {
-      return this.getOnlineLoginStatus(loginStatus.online)
-    }else {
-      return false
-    }
-  }
-  getOnlineLoginStatus(online: Observable<boolean>) {
-    return online.pipe(tap( res => {
-      console.log(res)
-      return res
+    return this.Auth.isLoggedIn.pipe(tap( loginStatus => {
+      // If the user isn't logged in he gets redirected to the main login page
+      if( loginStatus !== true ) {
+        this.router.navigate([""])
+      }
     }))
-  }
+    }
 }

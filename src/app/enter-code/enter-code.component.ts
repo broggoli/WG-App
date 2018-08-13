@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { RegisterService } from "../../_services"
+import { RegisterService } from "../_services"
 
 @Component({
   selector: 'app-enter-code',
@@ -12,7 +12,7 @@ export class EnterCodeComponent implements OnInit {
   flatCodeForm: FormGroup
   flatCode: FormControl
 
-  constructor(private register: RegisterService) { }
+  constructor(public register: RegisterService) { }
 
   ngOnInit() {
     this.createFormControls()

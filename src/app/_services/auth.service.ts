@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { CryptoService } from './crypto.service'
 import { UserData } from '../models/user.model'
 import { Observable, of } from "rxjs"
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 interface Response {
   success: boolean,
@@ -24,18 +24,13 @@ export class AuthService {
     private http: HttpClient) { }
 
   saveData( whatToSave: string, data: string, key: string){
-    console.log(data+"WSasdasdad")
     const decryptedData: UserData = JSON.parse(this.crypto.decryptData(data, key))
     localStorage.setItem(whatToSave, JSON.stringify(decryptedData))
-    console.log(localStorage.getItem(whatToSave))
   }
-  /// get acts like a property name even though it's a function
-  get isLoggedIn(): LoginStatus {
+  // get acts like a property name even though it's a function
+  get isLoggedIn(): Observable<boolean> {
     if( localStorage.getItem("userData") !== null ){
-      console.log(localStorage.getItem("userData"))
-      return {  
-                local: true,
-                online: this.http.post<Response>('/api/php/auth.php', JSON.stringify({task: 'isLoggedIn'})).pipe(map( res => {
+      return this.http.post<Response>('/api/php/auth.php', JSON.stringify({task: 'isLoggedIn'})).pipe(map( res => {
                     if( res.success === true ) {
                       if( JSON.parse(res.data) === true ) {
                         return true
@@ -43,15 +38,14 @@ export class AuthService {
                         return false
                       }
                     }
+                })).pipe(tap( res => {
+                  return res
                 }))
-            }
     }else{
-      return {  
-          local: false,
-          online: of(false)
-        }
+      return of(false)
     }
   }
+
 
   login(userName: string, password: string) {
     const pointer = JSON.stringify({

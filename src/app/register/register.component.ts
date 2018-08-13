@@ -13,10 +13,9 @@ styleUrls: ['./register.component.sass']
 })
 export class RegisterComponent implements OnInit {
 
-  constructor(private register: RegisterService,
+  constructor(public register: RegisterService,
             private router: Router) { 
   }
   ngOnInit() {
-    document.querySelector("#logOutButton").classList.add("loggedOut")
   }
 }
