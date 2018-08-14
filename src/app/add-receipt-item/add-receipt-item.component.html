@@ -1,3 +1,48 @@
-<p>
-  add-receipt-item works!
-</p>
+<div id="addReceipt">
+
+  <form [formGroup]="addReceiptForm" 
+        novalidate="novalidate" 
+        (ngSubmit)="addReceipt()">
+    <div>
+      <label>
+        <span>Datum:</span>
+        <input type="date" 
+              formControlName="receiptDate"
+              id="receiptDate"/>
+      </label>
+    </div>
+
+    <div>
+      <label>
+          <span>Kategorie:</span>
+          <select name="receiptCategory" 
+                  formControlName="receiptCategory">
+            <option *ngFor="let cat of categories"
+                value="{{ cat }}">
+              {{ cat }}
+            </option>
+          </select>
+      </label>
+    </div>
+    <div>
+      <label>
+          <span>Artikel:</span>
+          <input type="text" 
+                formControlName="itemName"
+                id="itemName"/>
+      </label>
+    </div>
+    <div>
+      <label>
+          <span>Preis:</span>
+          <input type="text" 
+                formControlName="itemPrice"
+                id="itemPrice"/>
+      </label>
+    </div>
+
+    <button >Eingeben</button>
+  </form>
+  
+  <pre>{{ addReceiptForm.value | json}}</pre>
+</div>
