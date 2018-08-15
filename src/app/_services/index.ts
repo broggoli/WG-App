@@ -7,3 +7,4 @@ export * from './user.service';
 export * from './register.service';
 export * from './flat.service'
 export * from './crypto.service'
+export * from './receipt.service'

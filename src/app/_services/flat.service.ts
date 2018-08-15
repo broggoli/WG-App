@@ -4,8 +4,8 @@ import { HttpClient } from "@angular/common/http"
 import { CryptoService } from './crypto.service'
 import { Flat } from "../models/flat.model"
 import { FlatData } from '../models/register.model';
-import { map, switchMap, tap } from '../../../node_modules/rxjs/operators';
-import { Observable, of } from '../../../node_modules/rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 interface Response {
   message: string,
@@ -23,7 +23,16 @@ export class FlatService {
               private http: HttpClient) { 
       this.flatCodeLength = 6
     }
-
+  
+  get getReceiptCategories(): string[] {
+    return [
+      "Grundnahrungsmittel",
+      "Haushalt",
+      "Katzen",
+      "Internet",
+      "Gemüseabo"
+    ]
+  }
   linkFlatToUser(flatCode: string, userPointer: string): Observable<Response> {
 
     return this.update( this.crypto.hash(flatCode), this.getFlatDataOnline(flatCode).pipe(map( res => {
@@ -68,7 +77,12 @@ export class FlatService {
       flatPointer : this.crypto.hash(flatCode),
       name : flatData.name,
       residents : [firstResident],
-      flatCode
+      flatCode,
+      receiptData: {
+        receiptDBPointer: "",
+        receiptCategories: [],
+        receipts: []
+      }
     }
     
     //hashing the name and encrypt with password so it can't easily be read out of the db

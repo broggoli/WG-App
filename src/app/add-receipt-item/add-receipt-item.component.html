@@ -1,48 +1,87 @@
 <div id="addReceipt">
 
+  <h1>Beleg Hinzufügen</h1>
   <form [formGroup]="addReceiptForm" 
         novalidate="novalidate" 
         (ngSubmit)="addReceipt()">
     <div>
-      <label>
+      <label [ngClass]="{'has-danger': receiptDate.invalid && (receiptDate.dirty || receiptDate.touched), 'has-success': receiptDate.valid && (receiptDate.dirty || receiptDate.touched) }">
         <span>Datum:</span>
         <input type="date" 
               formControlName="receiptDate"
               id="receiptDate"/>
       </label>
+      <div *ngIf="receiptDate.errors && (receiptDate.dirty || receiptDate.touched) " class="form-control-feedback">
+          <span *ngIf="receiptDate.errors.required">Gib bitte es Korrekts Datum aa!</span>
+      </div>
     </div>
 
     <div>
-      <label>
+      <label [ngClass]="{'has-danger': receiptCategory.invalid && (receiptCategory.dirty || receiptCategory.touched), 'has-success': receiptCategory.valid && (receiptCategory.dirty || receiptCategory.touched) }">
           <span>Kategorie:</span>
           <select name="receiptCategory" 
                   formControlName="receiptCategory">
-            <option *ngFor="let cat of categories"
+            <option *ngFor="let cat of receiptCategories"
                 value="{{ cat }}">
               {{ cat }}
             </option>
           </select>
       </label>
+      <div *ngIf="receiptCategory.errors && (receiptCategory.dirty || receiptCategory.touched) " class="form-control-feedback">
+          <span *ngIf="receiptCategory.errors.required">Gib bitte e Korrekti Kategorie aa!</span>
+      </div>
     </div>
     <div>
-      <label>
+      <label [ngClass]="{'has-danger': itemCount.invalid && (itemCount.dirty || itemCount.touched), 'has-success': itemCount.valid && (itemCount.dirty || itemCount.touched) }">
+        <span>Anzahl:</span>
+        <input type="number" 
+              formControlName="itemCount"
+              id="itemCount"/>
+      </label>
+      <div *ngIf="itemCount.errors && (itemCount.dirty || itemCount.touched) " class="form-control-feedback">
+          <span *ngIf="itemCount.errors.required">Gib bitte e Korrekti Anzahl aa!</span>
+      </div>
+
+      <label [ngClass]="{'has-danger': itemName.invalid && (itemName.dirty || itemName.touched), 'has-success': itemName.valid && (itemName.dirty || itemName.touched) }" >
           <span>Artikel:</span>
           <input type="text" 
                 formControlName="itemName"
                 id="itemName"/>
       </label>
+      <div *ngIf="itemName.errors && (itemName.dirty || itemName.touched) " class="form-control-feedback">
+          <span *ngIf="itemName.errors.required">Gib bitte en Artikel aa!</span>
+      </div>
     </div>
     <div>
-      <label>
+      <label [ngClass]="{'has-danger': itemPrice.invalid && (itemPrice.dirty || itemPrice.touched), 'has-success': itemPrice.valid && (itemPrice.dirty || itemPrice.touched) }">
           <span>Preis:</span>
-          <input type="text" 
+          <input type="number"
+                step="0.05"
                 formControlName="itemPrice"
                 id="itemPrice"/>
       </label>
+      <div *ngIf="itemPrice.errors && (itemPrice.dirty || itemPrice.touched) " class="form-control-feedback">
+          <span *ngIf="itemPrice.errors.required">Gib bitte en Priis aa!</span>
+          <span *ngIf="itemPrice.errors.pattern">Gib bitte en korrekte Priis aa!</span>
+      </div>
+    </div>
+    <div>
+      <label [ngClass]="{'has-danger': forMates.invalid && (forMates.dirty || forMates.touched), 'has-success': forMates.valid && (forMates.dirty || forMates.touched) }">
+          <span>Für:</span>
+          <select id="forMates"
+                  formControlName="forMates">
+            <option *ngFor="let group of flatGroups"
+                value="{{ group }}">
+              {{ group }}
+            </option>
+          </select>
+      </label>
+      <div *ngIf="forMates.errors && (forMates.dirty || forMates.touched) " class="form-control-feedback">
+          <span *ngIf="forMates.errors.required">Gib bitte en Priis aa!</span>
+          <span *ngIf="forMates.errors.pattern">Gib bitte en korrekte Priis aa!</span>
+      </div>
     </div>
 
-    <button >Eingeben</button>
+    <button class="button" [ngClass]="{'disabled': addReceiptForm.invalid}">Eingeben</button>
   </form>
-  
-  <pre>{{ addReceiptForm.value | json}}</pre>
 </div>

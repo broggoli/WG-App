@@ -25,7 +25,12 @@ export class HomeComponent implements OnInit {
       flatPointer: "",
       name: "",
       residents: [],
-      flatCode: ""
+      flatCode: "",
+      receiptData: {
+        receiptDBPointer: "",
+        receiptCategories: [],
+        receipts: []
+      }
     }
     this.flat.getFlatDataOnline( this.userData.flatCode ).subscribe( res => {
       this.flatData = JSON.parse(this.crypto.decryptData(res.data.data, this.userData.flatCode))
