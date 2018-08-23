@@ -16,11 +16,11 @@ export class HomeComponent implements OnInit {
   flatData: Flat
   constructor( private user: UserService,
     private crypto: CryptoService,
-                private flat: FlatService ) { }
+    private flat: FlatService ) { }
 
   ngOnInit() {
     console.log("home loaded")
-    this.userData = JSON.parse(localStorage.getItem("userData"))
+    this.userData = JSON.parse(localStorage.getItem("userData")).data
     this.flatData = {
       flatPointer: "",
       name: "",

@@ -22,6 +22,7 @@ import { AddFlatMatesComponent } from './add-flat-mates/add-flat-mates.component
 import { EnterCodeComponent } from './enter-code/enter-code.component';
 import { FlatRegisterComponent } from './flat-register/flat-register.component';
 import { AddReceiptItemComponent } from './add-receipt-item/add-receipt-item.component';
+import { PurchasesComponent } from './purchases/purchases.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { AddReceiptItemComponent } from './add-receipt-item/add-receipt-item.com
     AddFlatMatesComponent,
     EnterCodeComponent,
     FlatRegisterComponent,
-    AddReceiptItemComponent
+    AddReceiptItemComponent,
+    PurchasesComponent
   ],
   imports: [
     BrowserModule,

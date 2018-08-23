@@ -1,0 +1,21 @@
+<h1>Beleg Hinzufügen</h1>
+<form [formGroup]="getPurchasesForm" 
+      novalidate="novalidate" 
+      (ngSubmit)="getPurchases()">
+  <div>
+    <label [ngClass]="{'has-danger': purchasesMonth.invalid && (purchasesMonth.dirty || purchasesMonth.touched), 
+                      'has-success': purchasesMonth.valid && (purchasesMonth.dirty || purchasesMonth.touched) }">
+      <span>Datum:</span>
+      <input type="month" 
+            formControlName="purchasesMonth"
+            id="purchasesMonth"/>
+    </label>
+    <div *ngIf="purchasesMonth.errors && (purchasesMonth.dirty || purchasesMonth.touched) " class="form-control-feedback">
+        <span *ngIf="purchasesMonth.errors.required">Gib bitte es Korrekts Datum aa!</span>
+    </div>
+  </div>
+</form>
+
+<pre>
+  {{purchases | json }}
+</pre>

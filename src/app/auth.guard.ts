@@ -17,6 +17,7 @@ export class AuthGuard implements CanActivate {
 
     return this.Auth.isLoggedIn.pipe(tap( loginStatus => {
       // If the user isn't logged in he gets redirected to the main login page
+      console.log("loggedIn :", loginStatus)
       if( loginStatus !== true ) {
         this.router.navigate([""])
       }

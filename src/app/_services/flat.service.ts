@@ -4,8 +4,8 @@ import { HttpClient } from "@angular/common/http"
 import { CryptoService } from './crypto.service'
 import { Flat } from "../models/flat.model"
 import { FlatData } from '../models/register.model';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 interface Response {
   message: string,

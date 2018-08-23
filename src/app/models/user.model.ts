@@ -8,5 +8,10 @@ export class UserData{
 }
 export class User {
   pointer: string;
-  userData: UserData
+  userData: UserData;
+}
+
+export class LsUserData {
+  loggedIn: boolean;
+  data: UserData;
 }
